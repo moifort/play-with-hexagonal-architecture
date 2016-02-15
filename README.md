@@ -9,11 +9,27 @@ This project is a sample of an hexagonal architecture. This sample based on a fi
 ## Requierement
 
 * Java 8
-* manven 3
 
 ## Build & Run
 
-To build the project execute "mvn install" into the root directory. And run report to infra part.
+To build the project execute in the root directory: 
+
+```bash
+./mvnw clean install
+```
+
+Before to run, you need to build the application (see below). To run the application (it's will only show you `println()` in console output) execute in the root directory:
+
+```bash
+java -jar infra/application/command-line/target/command-line-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
+
+Normally it will display:
+
+```bash
+Add new file   -> IMFile{id='0', name='test.txt', ownerId='1', sharedUsersIdWithPermission={}}
+Get file id: 0 -> IMFile{id='0', name='test.txt', ownerId='1', sharedUsersIdWithPermission={}}
+```
 
 
 ## Hexagonal architecture
