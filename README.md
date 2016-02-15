@@ -88,7 +88,7 @@ I create one hexagone `filemanager` with:
 
 In hexagonal architecture Infra represents everything except the business code. 
 In this sample I groupe module by theme (application and persistence), obviously you can add other module like indexer with
-Elasticsearch, cloud application API, webservice REST, etc.  
+Elasticsearch, cloud application API, webservice REST or an other hexagonal architecture project.  
 
 #### How it's work?
 
@@ -123,6 +123,41 @@ module with a REST webservice for instance. The only thing you need to do is to 
 │           └── test
 └── pom.xml
 ```
+
+##  Maven architecture 
+The cool thing with maven that it fits very well with the hexagonal architecture. We use maven modules who define a 
+subproject and allow to create a specific `pom.xml`.
+
+The maven architecture looks like this:
+
+```bash
+                  +------------------------------------+
+                  |                                    |
+                  |    hexagonal-architecture-sample   |
+                  |                                    |
+                  +------------------+-----------------+
+                                     |
+          +--------------------------+---------------------------+  
+          |                                                      |
++---------+--------+                                   +---------+--------+
+|                  |                                   |                  |
+|      domain      |                                   |       infra      |                                    
+|                  |                                   |                  |
++------------------+                                   +---------+--------+
+                                                                 |
+                                        +------------------------+------------------------+
+                                        |                        |                        |
+                               +--------+---------+    +---------+---------+    +---------+--------+
+                               |                  |    |                   |    |                  |
+                               |   command-line   |    |     in-memory     |    |  sql-spring-data |
+                               |                  |    |                   |    |                  |
+                               +------------------+    +-------------------+    +------------------+
+```
+
+
+* `hexagonal-architecture-sample` pom will build all your module respecting the order of each module. 
+* `domain` is the first module to be build. As said in [Domain](#domain), the module depends only on a few external librayries (test only).
+* `infra` will import the domain dependency for: `command-line`, `in-memory`, `sql-spring-data`. It's  allow a version coherency between the domain and infra layer. 
 
 ## Pro
 
