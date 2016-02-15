@@ -1,6 +1,6 @@
 # hexagonal-architecture-sample
 
-This project is a sample of an hexagonal architecture. This sample based on a file managing kata:
+This project is a sample of an hexagonal architecture. This sample implements functionnalitis of a managing file:
 
 * Save/delete/get files
 * Permission on the file (owner of the file)
