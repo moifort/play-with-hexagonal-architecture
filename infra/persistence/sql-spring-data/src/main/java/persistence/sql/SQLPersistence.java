@@ -1,8 +1,7 @@
-package persistence;
+package persistence.sql;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import persistence.sql.PersistenceConfiguration;
 import persistence.sql.adapter.FileRepositoryAdapter;
 
 public final class SQLPersistence {

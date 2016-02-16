@@ -18,8 +18,6 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <guava.version>19.0</guava.version>
-
         <!-- Test -->
         <junit.version>4.12</junit.version>
         <assertj.version>3.3.0</assertj.version>
@@ -31,16 +29,13 @@
             <groupId>com.mottet</groupId>
             <artifactId>sql-spring-data</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.mottet</groupId>
             <artifactId>in-memory</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <type>jar</type>
         </dependency>
 
         <!-- Test -->
@@ -86,6 +81,8 @@
                             <mainClass>application.commandline.Application</mainClass>
                         </manifest>
                     </archive>
+                    <finalName>${project.name}-${project.version}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>

@@ -4,13 +4,13 @@ import domain.filemanager.api.FileManagerService;
 import domain.filemanager.api.entity.File;
 import domain.filemanager.core.FileManagerServiceImpl;
 import domain.filemanager.spi.FileRepository;
-import persistence.inmemory.repository.IMFileRepository;
+import persistence.sql.SQLPersistence;
 
 public class Application {
 
     public static void main(String[] args) throws Exception {
-        FileRepository fileRepository = new IMFileRepository();
-        //FileRepository fileRepository = SQLPersistence.get();
+        //FileRepository fileRepository = new InMemoryFileRepository();
+        FileRepository fileRepository = SQLPersistence.get();
         FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository);
 
         File file = fileManagerService.addFile("test.txt", "test.txt".getBytes(), "1");

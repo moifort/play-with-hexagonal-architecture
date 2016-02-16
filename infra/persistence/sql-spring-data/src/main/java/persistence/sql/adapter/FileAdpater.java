@@ -1,4 +1,4 @@
-package domain.filemanager.api.entity.impl;
+package persistence.sql.adapter;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
@@ -6,7 +6,7 @@ import domain.filemanager.api.entity.Permission;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileImpl implements File {
+public class FileAdpater implements File {
     private byte[] data;
     private String id;
     private String name;
@@ -83,7 +83,7 @@ public class FileImpl implements File {
 
     @Override
     public String toString() {
-        return "FileImpl{" +
+        return "FileAdpater{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", ownerId='" + ownerId + '\'' +

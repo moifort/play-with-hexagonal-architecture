@@ -5,6 +5,7 @@ import domain.filemanager.spi.FileRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
+import persistence.sql.SQLPersistence;
 
 public class SQLFileRepositoryTest {
 

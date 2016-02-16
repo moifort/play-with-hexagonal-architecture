@@ -1,20 +1,19 @@
 package persistence.inmemory.entity;
 
-import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class IMFile implements File {
+public class File implements domain.filemanager.api.entity.File {
     private final String id;
     private final String name;
     private final byte[] data;
     private final String ownerId;
     private Map<String, Permission> sharedUsersIdWithPermission = new HashMap<>();
 
-    public IMFile(String id, String name, byte[] data, String ownerId) {
+    public File(String id, String name, byte[] data, String ownerId) {
         this.id = id;
         this.name = name;
         this.data = data;
@@ -59,7 +58,7 @@ public class IMFile implements File {
             return false;
         }
 
-        IMFile author = (IMFile) o;
+        File author = (File) o;
 
         if ( ! Objects.equals(id, author.id)) return false;
 

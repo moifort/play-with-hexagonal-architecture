@@ -20,14 +20,14 @@ public class FileRepositoryAdapter implements domain.filemanager.spi.FileReposit
     @Override
     public domain.filemanager.api.entity.File findFileById(String fileId) {
         File file = fileRepository.findOne(Long.valueOf(fileId));
-        return fileMapper.fileToDomainFile(file);
+        return fileMapper.fileToFileDTO(file);
     }
 
     @Override
     public domain.filemanager.api.entity.File addFile(String fileName, byte[] data, String ownerId) {
         File fileToSave = fileFactory.createFile(fileName, data, ownerId);
         File fileSaved = fileRepository.save(fileToSave);
-        return fileMapper.fileToDomainFile(fileSaved);
+        return fileMapper.fileToFileDTO(fileSaved);
     }
 
     @Override
