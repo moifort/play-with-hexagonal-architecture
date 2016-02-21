@@ -42,8 +42,9 @@ public class FileManagerStepDefs {
     }
 
     @Then("^'(.*)' can get '(.*)' file$")
-    public void user_get_a_file(List<String> usersId, String fileName) throws Throwable {
-        usersId.forEach(userId -> user_get_a_file(fileName, userId));
+    public void user_get_a_file(List<String> usersId, List<String> fileNames) throws Throwable {
+        if (fileNames.size() == 1) usersId.forEach(userId -> user_get_a_file(fileNames.get(0), userId));
+        else usersId.forEach(userId -> user_get_all_files(fileNames, userId));
 
     }
 
@@ -150,6 +151,18 @@ public class FileManagerStepDefs {
         } catch (Exception e) {}
     }
 
+    @Then("^'(.*)' can get all shared files: '(.*)'$")
+    public void user_can_get_all_shared_file(String userId, List<String> fileNames) {
+        // Exercise
+        List<File> sharedFiles = fileManagerService.getAllSharedFiles(userId);
+
+        // Verify
+        assertThat(sharedFiles).hasSize(fileNames.size());
+        sharedFiles.stream()
+                .map(File::getName)
+                .forEach(fileName -> assertThat(fileName).isIn(fileNames));
+    }
+
     @Then("^'(.*)' file is shared to '(.*)' with '(.*)' permission$")
     public void file_is_shared_to_users(String fileName, List<String> usersId, String permission) throws Throwable {
         // Exercise
@@ -238,6 +251,17 @@ public class FileManagerStepDefs {
 
         // Verify
         assertThat(file.getName()).isEqualTo(fileName);
+    }
+
+    private void user_get_all_files(List<String> fileNames, String userId) {
+        // Exercise
+        List<File> files = fileManagerService.getAllFiles(userId);
+
+        // Verify
+        assertThat(files).hasSize(fileNames.size());
+        files.stream()
+                .map(File::getName)
+                .forEach(fileName ->  assertThat(fileName).isIn(fileNames));
     }
 
     private String getFileId(String fileName) {

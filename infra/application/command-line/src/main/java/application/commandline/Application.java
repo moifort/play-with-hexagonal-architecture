@@ -8,6 +8,8 @@ import persistence.sql.SQLPersistence;
 
 public class Application {
 
+
+
     public static void main(String[] args) throws Exception {
         //FileRepository fileRepository = new InMemoryFileRepository();
         FileRepository fileRepository = SQLPersistence.get();
@@ -18,6 +20,5 @@ public class Application {
 
         File myFile = fileManagerService.getFile(file.getId(), "1");
         System.out.println("Get file id: " + file.getId() + " -> " + myFile);
-
     }
 }

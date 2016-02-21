@@ -5,8 +5,10 @@ import domain.filemanager.api.entity.Permission;
 import domain.filemanager.spi.FileRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MockInMemoryFile implements FileRepository {
 
@@ -29,6 +31,28 @@ public class MockInMemoryFile implements FileRepository {
     @Override
     public File findFileById(String fileId) {
         return filesInMemory.get(fileId);
+    }
+
+    @Override
+    public List<File> findFilesByUserId(String ownerId) {
+        return filesInMemory.values()
+                .stream()
+                .filter(file -> ownerId.equals(file.getOwnerId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<File> findFilesBySharedUser(String userId) {
+        return filesInMemory.values()
+                .stream()
+                .filter(f -> isSharedToUser(f, userId))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isSharedToUser(File file, String userId) {
+        return file.getSharedUsersIdWithPermission()
+                .keySet()
+                .contains(userId);
     }
 
     @Override

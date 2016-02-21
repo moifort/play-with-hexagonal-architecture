@@ -1,7 +1,7 @@
 package persistence.sql;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import persistence.sql.adapter.FileRepositoryAdapter;
 
 public final class SQLPersistence {
@@ -17,7 +17,7 @@ public final class SQLPersistence {
 
     private static ApplicationContext getApplicationContext() {
         if (applicationContext == null) {
-            applicationContext = new AnnotationConfigApplicationContext(PersistenceConfiguration.class);
+            applicationContext = new SpringApplication(PersistenceConfiguration.class).run();
         }
         return applicationContext;
     }

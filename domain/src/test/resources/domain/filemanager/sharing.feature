@@ -38,3 +38,10 @@ Feature: File manager - Sharing
         And  'Charles' share 'test.txt' file to 'Luc' with 'GET' permission
         Then 'Yannick' cannot get 'test.txt' file
         And 'Luc' cannot get 'test.txt' file
+
+    Scenario: Shared user can get all shared files
+        Given 'Thibaut' add 'thibaut-file.txt' file
+        And 'Maxime' add 'maxime-file.txt' file
+        When 'Thibaut' share 'thibaut-file.txt' file to 'Charles' with 'GET' permission
+        And 'Maxime' share 'maxime-file.txt' file to 'Charles' with 'GET' permission
+        Then 'Charles' can get all shared files: 'thibaut-file.txt, maxime-file.txt'

@@ -8,6 +8,7 @@ import persistence.sql.factory.FileFactory;
 import persistence.sql.repository.FileRepository;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,6 +22,11 @@ public class FileRepositoryAdapter implements domain.filemanager.spi.FileReposit
     public domain.filemanager.api.entity.File findFileById(String fileId) {
         File file = fileRepository.findOne(Long.valueOf(fileId));
         return fileMapper.fileToFileDTO(file);
+    }
+
+    @Override
+    public List<domain.filemanager.api.entity.File> findFilesByUserId(String ownerId) {
+        return null;
     }
 
     @Override

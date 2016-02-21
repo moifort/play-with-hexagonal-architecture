@@ -7,6 +7,7 @@ import domain.filemanager.api.exception.AccessDeniedException;
 import domain.filemanager.api.exception.FileNotFoundException;
 import domain.filemanager.spi.FileRepository;
 
+import java.util.List;
 import java.util.Map;
 
 public class FileManagerServiceImpl implements FileManagerService {
@@ -23,6 +24,16 @@ public class FileManagerServiceImpl implements FileManagerService {
         if (fileToGet == null) throw new FileNotFoundException();
         if (fileAccessService.isUserHasNotAccess(userIdRequesting, fileToGet)) throw new AccessDeniedException();
         return fileToGet;
+    }
+
+    @Override
+    public List<File> getAllFiles(String userIdRequesting) {
+        return fileRepository.findFilesByUserId(userIdRequesting);
+    }
+
+    @Override
+    public List<File> getAllSharedFiles(String userIdRequesting) {
+        return fileRepository.findFilesBySharedUser(userIdRequesting);
     }
 
     @Override

@@ -4,8 +4,10 @@ import domain.filemanager.api.entity.Permission;
 import persistence.inmemory.entity.File;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class InMemoryFileRepository implements domain.filemanager.spi.FileRepository {
 
@@ -28,6 +30,14 @@ public class InMemoryFileRepository implements domain.filemanager.spi.FileReposi
     @Override
     public File findFileById(String fileId) {
         return filesInMemory.get(fileId);
+    }
+
+    @Override
+    public List<domain.filemanager.api.entity.File> findFilesByUserId(String ownerId) {
+        return filesInMemory.values()
+                .stream()
+                .filter(file -> ownerId.equals(file.getOwnerId()))
+                .collect(Collectors.toList());
     }
 
     @Override
