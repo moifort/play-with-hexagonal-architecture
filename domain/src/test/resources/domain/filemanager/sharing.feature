@@ -42,6 +42,7 @@ Feature: File manager - Sharing
     Scenario: Shared user can get all shared files
         Given 'Thibaut' add 'thibaut-file.txt' file
         And 'Maxime' add 'maxime-file.txt' file
+        And 'Maxime' add 'maxime-file-not-shared.txt' file
         When 'Thibaut' share 'thibaut-file.txt' file to 'Charles' with 'GET' permission
         And 'Maxime' share 'maxime-file.txt' file to 'Charles' with 'GET' permission
         Then 'Charles' can get all shared files: 'thibaut-file.txt, maxime-file.txt'
