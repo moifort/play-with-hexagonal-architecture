@@ -28,6 +28,21 @@ public class InMemoryFileRepository implements domain.filemanager.spi.FileReposi
     }
 
     @Override
+    public List<domain.filemanager.api.entity.File> findFilesBySharedUser(String userId) {
+        return filesInMemory.values()
+                .stream()
+                .filter(f -> isSharedToUser(f, userId))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isSharedToUser(domain.filemanager.api.entity.File file, String userId) {
+        return file.getSharedUsersIdWithPermission()
+                .keySet()
+                .contains(userId);
+    }
+
+
+    @Override
     public File findFileById(String fileId) {
         return filesInMemory.get(fileId);
     }
