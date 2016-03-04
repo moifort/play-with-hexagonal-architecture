@@ -4,7 +4,9 @@ import application.rest.mapper.FileDTOMapper;
 import application.rest.resource.FileManagerResource;
 import domain.filemanager.api.FileManagerService;
 import domain.filemanager.core.FileManagerServiceImpl;
+import domain.filemanager.spi.FileEventHandler;
 import domain.filemanager.spi.FileRepository;
+import handler.irc.IrcHandler;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -27,13 +29,13 @@ public class RestApplication extends Application<RestConfiguration> {
 
     @Override
     public void run(RestConfiguration configuration, Environment environment) {
-        // Init dependencies & business service
+        // Init Domain
         FileRepository fileRepository = new InMemoryFileRepository();
-        FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository);
+        FileEventHandler fileEventHandler = new IrcHandler();
+        FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, fileEventHandler);
 
+        // REST Dependency injection
         FileDTOMapper fileDTOMapper = FileDTOMapper.INSTANCE;
-
-        // Dependency injection
         FileManagerResource fileManagerResource = new FileManagerResource(fileManagerService, fileDTOMapper);
 
         // Register controller

@@ -13,9 +13,7 @@ import domain.filemanager.mock.MockFile;
 import domain.filemanager.mock.MockFileEventHandler;
 import domain.filemanager.mock.MockInMemoryFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,6 +40,18 @@ public class FileManagerStepDefs {
 
         // Verify
         assertThat(fileIsSaved).isNotNull();
+    }
+
+    @When("^'(.*)' get all files$")
+    public void user_get_all_files(String userId) throws Throwable {
+        // Exercise
+        fileManagerService.getAllFiles(userId);
+    }
+
+    @When("^'(.*)' get all shared files$")
+    public void user_get_all_shared_files(String userId) throws Throwable {
+        // Exercise
+        fileManagerService.getAllSharedFiles(userId);
     }
 
     @Then("^'(.*)' can get '(.*)' file$")
@@ -249,22 +259,21 @@ public class FileManagerStepDefs {
     /*********************************
      * HOOK
      *********************************/
-    @Then("^add file event is triggered with '(.*)' owner and '(.*)' file$")
-    public void add_file_event_is_triggered_with_owner_and_file(String userId, String fileName) {
+    @Then("^'(.*)' is triggered with '(.*)' user name and '(.*)' files id$")
+    public void methodEvent_is_triggered_with_owner_and_file(String methodName, String userId, List<String> fileNames) {
+        assertThat(mockFileEventHandler.getMethodName()).isEqualTo(methodName);
         assertThat(mockFileEventHandler.getUserId()).isEqualTo(userId);
-        assertThat(mockFileEventHandler.getFileId()).isEqualTo(mockFileRepository.findByName(fileName).get().getId());
+        assertThat(mockFileEventHandler.getFiles()).hasSize(fileNames.size());
+        if (!methodName.equals("deleteFileEvent")){
+            assertThat(mockFileEventHandler.getFiles()).isEqualTo(getFiles(fileNames));
+        }
     }
 
-    @Then("^delete file event is triggered with '(.*)' owner and '(.*)' file$")
-    public void delete_file_event_is_triggered_with_owner_and_file(String userId, String fileName) {
+    @Then("^'(.*)' is triggered with '(.*)' owner and '(.*)' file and '(.*)' shared user and '(.*)' permission$")
+    public void share_a_file_event_is_triggered_with_owner_and_file_and_shared_users_and_permission(String methodName, String userId, String fileName, List<String> sharedUsers, String permission) {
+        assertThat(mockFileEventHandler.getMethodName()).isEqualTo(methodName);
         assertThat(mockFileEventHandler.getUserId()).isEqualTo(userId);
-        assertThat(mockFileEventHandler.getFileId()).isNotEmpty();
-    }
-
-    @Then("^share a file event is triggered with '(.*)' owner and '(.*)' file and '(.*)' shared user and '(.*)' permission$")
-    public void share_a_file_event_is_triggered_with_owner_and_file_and_shared_users_and_permission(String userId, String fileName, List<String> sharedUsers, String permission) {
-        assertThat(mockFileEventHandler.getUserId()).isEqualTo(userId);
-        assertThat(mockFileEventHandler.getFileId()).isEqualTo(mockFileRepository.findByName(fileName).get().getId());
+        assertThat(mockFileEventHandler.getFiles()).isEqualTo(Collections.singletonList(getFile(fileName)));
         assertThat(mockFileEventHandler.getSharedUsersIdWithPermission()).isEqualTo(getUsersIdToShareWithPermission(sharedUsers, permission));
     }
 
@@ -290,6 +299,17 @@ public class FileManagerStepDefs {
                 .forEach(fileName ->  assertThat(fileName).isIn(fileNames));
     }
 
+    private List<File> getFiles(List<String> filenames) {
+        return filenames.stream()
+                .map(this::getFile)
+                .collect(Collectors.toList());
+    }
+
+    private File getFile(String filename) {
+        return mockFileRepository.findByName(filename).get();
+    }
+
+
     private String getFileId(String fileName) {
         return mockFileRepository.findByName(fileName)
             .map(File::getId)
@@ -300,6 +320,4 @@ public class FileManagerStepDefs {
         return usersIdToShare.stream()
             .collect(Collectors.toMap(Function.identity(), s -> Permission.valueOf(permission)));
     }
-
-
 }

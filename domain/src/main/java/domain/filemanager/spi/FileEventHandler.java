@@ -1,15 +1,21 @@
 package domain.filemanager.spi;
 
+import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 
+import java.util.List;
 import java.util.Map;
 
 public interface FileEventHandler {
 
-    void addFileEvent(String userId, String fileId);
+    void addFileEvent(String userId, File file);
 
-    void deleteFileEvent(String userId, String fileId);
+    void getFileEvent(String userId, List<File> files);
 
-    void shareFileEvent(String userId, String fileId, Map<String, Permission> sharedUsersIdWithPermission);
+    void getSharedFileEvent(String userId, List<File> files);
+
+    void deleteFileEvent(String userId, File file);
+
+    void shareFileEvent(String userId, File file, Map<String, Permission> sharedUsersIdWithPermission);
 
 }

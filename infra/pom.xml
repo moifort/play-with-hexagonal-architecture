@@ -17,6 +17,7 @@
         <module>persistence/in-memory</module>
         <module>persistence/sql-spring-data</module>
         <module>application/rest-api</module>
+        <module>handler/irc</module>
     </modules>
 
     <dependencies>
