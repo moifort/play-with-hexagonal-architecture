@@ -27,7 +27,11 @@
             <groupId>com.mottet</groupId>
             <artifactId>in-memory</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.mottet</groupId>
+            <artifactId>jioc</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
