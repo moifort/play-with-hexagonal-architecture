@@ -164,7 +164,7 @@ interface defined in the spi domain, here `FileRepository` that allow to `filema
 your hexagone with module defined in the **infra** layer. In this sample you can choose between to kind of persistence **in-memory** or **sql-spring-data**. 
 * **command-line** module it's a very simple, it runs one action with a simple `println()`. You can create more complex application 
 module with a REST webservice for instance. The only thing you need to do is to inject dependencies that your hexagone need when the application start.
-* **rest-api** module it's REST api webservice using IRC to send events
+* **rest-api** module it's REST api webservice sending action events on IRC chan
 
 ```bash
 .
