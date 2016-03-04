@@ -6,6 +6,7 @@ import persistence.sql.mapper.FileMapper;
 import persistence.sql.entity.File;
 import persistence.sql.factory.FileFactory;
 import persistence.sql.repository.FileRepository;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -22,6 +23,11 @@ public class FileRepositoryAdapter implements domain.filemanager.spi.FileReposit
     public domain.filemanager.api.entity.File findFileById(String fileId) {
         File file = fileRepository.findOne(Long.valueOf(fileId));
         return fileMapper.fileToFileDTO(file);
+    }
+
+    @Override
+    public List<domain.filemanager.api.entity.File> findFilesBySharedUser(String userId) {
+        throw new NotImplementedException();
     }
 
     @Override

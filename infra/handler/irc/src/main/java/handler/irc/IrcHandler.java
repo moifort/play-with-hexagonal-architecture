@@ -1,10 +1,11 @@
 package handler.irc;
 
-import com.sun.deploy.util.StringUtils;
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 import domain.filemanager.spi.FileEventHandler;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,10 +57,22 @@ public class IrcHandler implements FileEventHandler {
     }
 
     private String displayFiles(List<File> files) {
-        return StringUtils.join(files.stream().map(this::displayFiles).collect(Collectors.toList()), ", ");
+        return join(files.stream().map(this::displayFiles).collect(Collectors.toList()), ", ");
     }
 
     private String displayFiles(File file) {
         return file.getName();
+    }
+
+    private static String join(Collection var0, String var1) {
+        StringBuffer var2 = new StringBuffer();
+
+        for(Iterator var3 = var0.iterator(); var3.hasNext(); var2.append((String)var3.next())) {
+            if(var2.length() != 0) {
+                var2.append(var1);
+            }
+        }
+
+        return var2.toString();
     }
 }
