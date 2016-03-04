@@ -20,7 +20,7 @@ To build the project execute in the root directory:
 
 ### Simple REST API with IRC Event handler
 
-Before to run, you need to build the application (see below). To run the application (it's will only show you `println()` in console output) execute in the root directory:
+Before to run, you need to build the application (see below). To run the application execute in the root directory:
 
 ```bash
 java -jar infra/application/rest-api/target/rest-api-1.0-SNAPSHOT.jar server
@@ -39,11 +39,11 @@ Open on your favorite web browser
 ##### Add a file
 
 ```http
-http://localhost:8080/file/add?name=MyFile
+http://localhost:8080/file/add?name=Hexagonal
 ```
 Response:
 ```json
-{"id":0,"name":"MyFile"}
+{"id":0,"name":"Hexagonal"}
 ```
 
 ##### Get the file
@@ -53,7 +53,7 @@ http://localhost:8080/file/0
 ```
 Response:
 ```json
-{"id":0,"name":"MyFile"}
+{"id":0,"name":"Hexagonal"}
 ```
 
 ##### Get all files
@@ -63,12 +63,12 @@ http://localhost:8080/file
 ```
 Response:
 ```json
-[{"id":0,"name":"MyFile"}]
+[{"id":0,"name":"Hexagonal"}]
 ```
 
 #### Go back on Kiwiirc chan
 
-
+![IRC](https://raw.githubusercontent.com/moifort/hexagonal-architecture-sample/master/irc-handler.png)
 
 ### Command Line Application
 
@@ -99,6 +99,9 @@ We use maven module to isolate layer of hexagonal architecture. Main modules **d
 │   │   └── command-line
 │   │       ├── pom.xml
 │   │       └── src
+│   │   └── rest-api
+│   │       ├── pom.xml
+│   │       └── src
 │   ├── persistence
 │   │   ├── in-memory
 │   │   │   ├── pom.xml
@@ -106,6 +109,10 @@ We use maven module to isolate layer of hexagonal architecture. Main modules **d
 │   │   └── sql-spring-data
 │   │       ├── pom.xml
 │   │       └── src
+│   ├── handler
+│   │   ├── irc
+│   │   │   ├── pom.xml
+│   │   │   └── src
 │   └── pom.xml
 └── pom.xml
 ```
@@ -151,19 +158,27 @@ interface defined in the spi domain, here `FileRepository` that allow to `filema
 * **in-memory** very simple module using a simple in memory HashMap 
 * **sql-spring-data** more complex module using **Spring Boot** with **Spring Data JPA** and **Mapstruct** dependency with **H2** db
 
+**handler** directory contains one module: irc. Handler directory defines all the technologie we can use to send notification from the domain. Here we use IRC but we can use Slack or Twitter etc.
+
 **application** directory contains only one module **command-line**. Application module is little tricky, you need to connect 
 your hexagone with module defined in the **infra** layer. In this sample you can choose between to kind of persistence **in-memory** or **sql-spring-data**. 
-**command-line** module it's a very simple, it runs one action with a simple `println()`. You can create more complex application 
+* **command-line** module it's a very simple, it runs one action with a simple `println()`. You can create more complex application 
 module with a REST webservice for instance. The only thing you need to do is to inject dependencies that your hexagone need when the application start.
+* **rest-api** module it's REST api webservice using IRC to send events
 
 ```bash
 .
 ├── application
 │   └── command-line
+│   │   ├── pom.xml
+│   │   └── src
+│   │       ├── main
+│   │       └── test
+│   └── rest-api
 │       ├── pom.xml
-│       ├── src
-│       │   ├── main
-│       │   └── test
+│       └──  src
+│           ├── main
+│           └── test
 ├── persistence
 │   ├── in-memory
 │   │   ├── pom.xml
@@ -172,7 +187,13 @@ module with a REST webservice for instance. The only thing you need to do is to 
 │   │   │   └── test
 │   └── sql-spring-data
 │       ├── pom.xml
-│       ├── src
+│       └── src
+│           ├── main
+│           └── test
+├── handler
+│   └── irc
+│       ├── pom.xml
+│       └── src
 │           ├── main
 │           └── test
 └── pom.xml
@@ -199,11 +220,11 @@ The maven architecture looks like this:
 |                  |                                   |                  |
 +------------------+                                   +---------+--------+
                                                                  |
-                                        +------------------------+------------------------+
+                                        +------------------------+------------------------+- - - - -
                                         |                        |                        |
                                +--------+---------+    +---------+---------+    +---------+--------+
                                |                  |    |                   |    |                  |
-                               |   command-line   |    |     in-memory     |    |  sql-spring-data |
+                               |     rest-api     |    |     in-memory     |    |  sql-spring-data |
                                |                  |    |                   |    |                  |
                                +------------------+    +-------------------+    +------------------+
 ```
