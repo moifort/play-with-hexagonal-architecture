@@ -18,6 +18,60 @@ To build the project execute in the root directory:
 ./mvnw clean install
 ```
 
+### Simple REST API with IRC Event handler
+
+Before to run, you need to build the application (see below). To run the application (it's will only show you `println()` in console output) execute in the root directory:
+
+```bash
+java -jar infra/application/rest-api/target/rest-api-1.0-SNAPSHOT.jar server
+```
+
+#### On Kiwiirc chan
+
+Go to `https://kiwiirc.com/client/irc.freenode.net/`
+
+Connect to the chan `#HewaBot` and lets the window open.
+
+#### On your machine (REST api)
+
+Open on your favorite web browser 
+
+##### Add a file
+
+```http
+http://localhost:8080/file/add?name=MyFile
+```
+Response:
+```json
+{"id":0,"name":"MyFile"}
+```
+
+##### Get the file
+
+```http
+http://localhost:8080/file/0
+```
+Response:
+```json
+{"id":0,"name":"MyFile"}
+```
+
+##### Get all files
+
+```http
+http://localhost:8080/file
+```
+Response:
+```json
+[{"id":0,"name":"MyFile"}]
+```
+
+#### Go back on Kiwiirc chan
+
+
+
+### Command Line Application
+
 Before to run, you need to build the application (see below). To run the application (it's will only show you `println()` in console output) execute in the root directory:
 
 ```bash
