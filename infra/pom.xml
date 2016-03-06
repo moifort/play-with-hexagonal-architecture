@@ -12,14 +12,14 @@
     <artifactId>infra</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>application/command-line</module>
-        <module>application/rest-api</module>
-
         <module>persistence/in-memory</module>
         <module>persistence/sql-spring-data</module>
 
-        <module>handler/irc</module>
-        <module>handler/mail</module>
+        <module>notification/irc</module>
+        <module>notification/mail</module>
+
+        <module>application/command-line</module>
+        <module>application/rest-api</module>
     </modules>
 
     <dependencies>

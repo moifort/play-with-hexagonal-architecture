@@ -5,7 +5,7 @@ import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 import domain.filemanager.api.exception.AccessDeniedException;
 import domain.filemanager.api.exception.FileNotFoundException;
-import domain.filemanager.spi.FileEventHandler;
+import domain.filemanager.spi.FileNotification;
 import domain.filemanager.spi.FileRepository;
 
 import java.util.Collections;
@@ -14,16 +14,16 @@ import java.util.Map;
 
 public class FileManagerServiceImpl implements FileManagerService {
     private final FileRepository fileRepository;
-    private final FileEventHandler fileEventHandler;
+    private final FileNotification fileNotification;
     private final FileAccessService fileAccessService = new FileAccessService();
 
     public FileManagerServiceImpl(FileRepository fileRepository) {
         this(fileRepository, new EmptyEventHandler());
     }
 
-    public FileManagerServiceImpl(FileRepository fileRepository, FileEventHandler fileEventHandler) {
+    public FileManagerServiceImpl(FileRepository fileRepository, FileNotification fileNotification) {
         this.fileRepository = fileRepository;
-        this.fileEventHandler = fileEventHandler;
+        this.fileNotification = fileNotification;
     }
 
     @Override
@@ -31,28 +31,44 @@ public class FileManagerServiceImpl implements FileManagerService {
         File fileToGet = fileRepository.findFileById(fileId);
         if (fileToGet == null) throw new FileNotFoundException();
         if (fileAccessService.isUserHasNotAccess(userIdRequesting, fileToGet)) throw new AccessDeniedException();
-        fileEventHandler.getFileEvent(userIdRequesting, Collections.singletonList(fileToGet));
+        fileNotification.sendNotification(
+                FileNotification.Type.GET,
+                userIdRequesting,
+                Collections.singletonList(fileToGet),
+                Collections.emptyMap());
         return fileToGet;
     }
 
     @Override
     public List<File> getAllFiles(String userIdRequesting) {
         List<File> allFiles = fileRepository.findFilesByUserId(userIdRequesting);
-        fileEventHandler.getFileEvent(userIdRequesting, allFiles);
+        fileNotification.sendNotification(
+                FileNotification.Type.GET,
+                userIdRequesting,
+                allFiles,
+                Collections.emptyMap());
         return allFiles;
     }
 
     @Override
     public List<File> getAllSharedFiles(String userIdRequesting) {
         List<File> allSharedFiles =  fileRepository.findFilesBySharedUser(userIdRequesting);
-        fileEventHandler.getSharedFileEvent(userIdRequesting, allSharedFiles);
+        fileNotification.sendNotification(
+                FileNotification.Type.GET_SHARE,
+                userIdRequesting,
+                allSharedFiles,
+                Collections.emptyMap());
         return allSharedFiles;
     }
 
     @Override
     public File addFile(String fileName, byte[] data, String userIdRequesting) {
         File addedFile = fileRepository.addFile(fileName, data, userIdRequesting);
-        fileEventHandler.addFileEvent(userIdRequesting, addedFile);
+        fileNotification.sendNotification(
+                FileNotification.Type.ADD,
+                userIdRequesting,
+                Collections.singletonList(addedFile),
+                Collections.emptyMap());
         return addedFile;
     }
 
@@ -62,7 +78,11 @@ public class FileManagerServiceImpl implements FileManagerService {
         if (fileToDelete == null) throw new FileNotFoundException();
         if (fileAccessService.isUserCanNotDelete(userIdRequesting, fileToDelete)) throw new AccessDeniedException();
         fileRepository.deleteFile(fileId);
-        fileEventHandler.deleteFileEvent(userIdRequesting, fileToDelete);
+        fileNotification.sendNotification(
+                FileNotification.Type.DELETE,
+                userIdRequesting,
+                Collections.singletonList(fileToDelete),
+                Collections.emptyMap());
     }
 
     @Override
@@ -71,6 +91,10 @@ public class FileManagerServiceImpl implements FileManagerService {
         if (fileToShare == null) throw new FileNotFoundException();
         if (fileAccessService.isUserCanNotShare(userIdRequesting, fileToShare)) throw new AccessDeniedException();
         fileRepository.shareFile(fileId, sharedUsersIdWithPermission);
-        fileEventHandler.shareFileEvent(userIdRequesting, fileToShare, sharedUsersIdWithPermission);
+        fileNotification.sendNotification(
+                FileNotification.Type.SHARE_WITH,
+                userIdRequesting,
+                Collections.singletonList(fileToShare),
+                sharedUsersIdWithPermission);
     }
 }

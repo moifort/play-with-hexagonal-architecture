@@ -4,13 +4,13 @@ import application.rest.mapper.FileDTOMapper;
 import application.rest.resource.FileManagerResource;
 import domain.filemanager.api.FileManagerService;
 import domain.filemanager.core.FileManagerServiceImpl;
-import domain.filemanager.spi.FileEventHandler;
+import domain.filemanager.spi.FileNotification;
 import domain.filemanager.spi.FileRepository;
-import handler.irc.IrcHandler;
+import notification.irc.IrcHandler;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import persistence.inmemory.repository.InMemoryFileRepository;
+import persistence.inmemory.repository.InMemoryFileNotificationRepository;
 
 public class RestApplication extends Application<RestConfiguration> {
 
@@ -30,9 +30,9 @@ public class RestApplication extends Application<RestConfiguration> {
     @Override
     public void run(RestConfiguration configuration, Environment environment) {
         // Init Domain
-        FileRepository fileRepository = new InMemoryFileRepository();
-        FileEventHandler fileEventHandler = new IrcHandler();//new MailHandler();
-        FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, fileEventHandler);
+        FileRepository fileRepository = new InMemoryFileNotificationRepository();
+        FileNotification fileNotification = new IrcHandler("irc.freenode.org","#HewaBot");
+        FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, fileNotification);
 
         // REST Dependency injection
         FileDTOMapper fileDTOMapper = FileDTOMapper.INSTANCE;

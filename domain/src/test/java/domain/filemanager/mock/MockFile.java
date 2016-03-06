@@ -14,6 +14,10 @@ public class MockFile implements File {
     private final String ownerId;
     private Map<String, Permission> sharedUsersIdWithPermission = new HashMap<>();
 
+    public MockFile(String id,String ownerId) {
+        this(id, id, id.getBytes(), ownerId);
+    }
+
     public MockFile(String id, String name, byte[] data, String ownerId) {
         this.id = id;
         this.name = name;

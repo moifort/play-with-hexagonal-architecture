@@ -2,36 +2,15 @@ package domain.filemanager.core;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.filemanager.spi.FileEventHandler;
+import domain.filemanager.spi.FileNotification;
 
 import java.util.List;
 import java.util.Map;
 
-public class EmptyEventHandler implements FileEventHandler {
+public class EmptyEventHandler implements FileNotification {
 
     @Override
-    public void addFileEvent(String userId, File file) {
-        // Do nothing
+    public void sendNotification(Type type, String userId, List<File> files, Map<String, Permission> sharedUsersIdWithPermission) {
+        // Do Nothing
     }
-
-    @Override
-    public void getFileEvent(String userId, List<File> files) {
-        // Do nothing
-    }
-
-    @Override
-    public void getSharedFileEvent(String userId, List<File> files) {
-        // Do nothing
-    }
-
-    @Override
-    public void deleteFileEvent(String userId, File file) {
-        // Do nothing
-    }
-
-    @Override
-    public void shareFileEvent(String userId, File file, Map<String, Permission> sharedUsersIdWithPermission) {
-        // Do nothing
-    }
-
 }
