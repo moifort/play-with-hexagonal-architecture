@@ -24,7 +24,7 @@ public class Application {
         InMemoryFileNotificationRepository fileRepository = new InMemoryFileNotificationRepository();
 
         // Notification Service
-        FileNotificationService mailNotificationService = new MailNotification("thibaut@gmail.com", "mypasswort");
+        FileNotificationService mailNotificationService = new MailNotification("sender@gmail.com", "mypasswort", "thibaut.mottet@gmail.com");
         FileNotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
         NotificationManagerService notificationManagerService = new NotificationManagerServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
@@ -32,7 +32,6 @@ public class Application {
 
         // File Manager
         FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, notificationManagerService);
-
 
 
         /***** Run *****/

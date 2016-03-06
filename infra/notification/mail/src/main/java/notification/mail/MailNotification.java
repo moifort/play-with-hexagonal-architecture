@@ -1,13 +1,15 @@
 package notification.mail;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 import domain.notificationmanager.spi.FileNotificationService;
 
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.net.PasswordAuthentication;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,7 +59,7 @@ public class MailNotification implements FileNotificationService {
             message.setSubject("File manager sendNotification");
             message.setText(messageEvent);
             Transport.send(message);
-        } catch (MessagingException e) {
+        } catch (javax.mail.MessagingException e) {
             throw new RuntimeException(e);
         }
     }
