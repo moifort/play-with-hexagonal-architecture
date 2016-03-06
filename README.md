@@ -111,7 +111,7 @@ We use maven module to isolate layer of hexagonal architecture. Main modules **d
 │   │   └── sql-spring-data
 │   │       ├── pom.xml
 │   │       └── src
-│   ├── handler
+│   ├── notification
 │   │   ├── irc
 │   │   │   ├── pom.xml
 │   │   │   └── src
@@ -205,7 +205,7 @@ module with a REST webservice for instance. The only thing you need to do is to 
 │       └── src
 │           ├── main
 │           └── test
-├── handler
+├── notification
 │   └── irc
 │   │   ├── pom.xml
 │   │   └── src
@@ -274,3 +274,7 @@ first on the business and after on what the business need: SQL bdd or noSQL bdd?
 
 Today I am not mature enough on this architecture to give you more arguments. Don't hesitate to make PR on the readme or
 to propose improvement on my current architecture! 
+
+## Licence
+
+WTFPL-2.0 © Thibaut Mottet
