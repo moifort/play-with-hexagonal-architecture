@@ -33,12 +33,6 @@ public class MailHandlerTest {
             this.name = name;
         }
 
-        public MockFile(String id, String name, String ownerId, Map<String, Permission> sharedUsersIdWithPermission) {
-            this.id = id;
-            this.name = name;
-            this.ownerId = ownerId;
-            this.sharedUsersIdWithPermission = sharedUsersIdWithPermission;
-        }
 
         @Override
         public String getId() {
