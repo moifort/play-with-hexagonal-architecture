@@ -6,8 +6,7 @@ This project is a sample of an hexagonal architecture. This sample implements fu
 * Permission on the file (owner of the file)
 * Sharing file (share the file with different permission to other user)
 * Send notification when save/delete/get/sharing are call
-
-* Notification manager that allow to implement several notification services (IRC, mail, etc.) and
+* Notification manager that allow to implement several notification services (IRC, mail, Twitter, etc.) and allow to the user to configure it (e.i. when the user delete a file it's send the notification by email only or when the file is share it's send a notification by mail and Twitter)
 
 ## Requirement
 
@@ -132,10 +131,14 @@ scenarios in test/resources.
 
 The domain module must contains a minimum of dependencies (test dependencies and maybe guava).
 
-I create one hexagon `filemanager` with:
+The structure of an hexagon is defined like this:
 - **api** represents what the hexagon offers (business functionality)
 - **spi** represents what the hexagon need (i.e. persistence)
 - **core** represents the inside of the hexagon (where all the business code are)
+
+I create two hexagons:
+* **filemanager** implements all the file manager functionality (get/save/delete/share) and also a notification center how send a notification each time a functionnality is call.
+* **notificationmanager** allows to manage all the notification services like IRC or mail, already implemented, or you can add slack, twitter, facebook or webhooks. With this hexagon you can aggregate all your notification services and give the possibility to the user to manage mapping between a notification type and a service. e.i. when the user delete a file it's send the notification by email only or when the file is share it's send a notification by mail and Twitter.
 
 ```bash
 ├── pom.xml
@@ -144,6 +147,10 @@ I create one hexagon `filemanager` with:
     │   ├── java
     │   │   └── domain
     │   │       └── filemanager
+    │   │           ├── api
+    │   │           ├── core
+    │   │           └── spi
+    │   │       └── notificationmanager
     │   │           ├── api
     │   │           ├── core
     │   │           └── spi
