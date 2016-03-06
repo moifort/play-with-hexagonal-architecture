@@ -15,8 +15,8 @@ public class MailHandler implements FileEventHandler {
     private final Session session;
 
     public MailHandler() {
-        final String username = "thibaut@alantaya.com";
-        final String password = "Doremido91!";
+        final String username = "my@mail.com";
+        final String password = "mypassword";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");

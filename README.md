@@ -1,12 +1,12 @@
 # hexagonal-architecture-sample
 
-This project is a sample of an hexagonal architecture. This sample implements functionalities to manage files:
+This project is a sample of an hexagonal architecture. This sample implements functionality to manage files:
 
 * Save/delete/get files
 * Permission on the file (owner of the file)
-* Sharing file (share the file with differents permission to other user)
+* Sharing file (share the file with different permission to other user)
 
-## Requierement
+## Requirement
 
 * Java 8
 
@@ -88,7 +88,7 @@ Get file id: 0 -> IMFile{id='0', name='test.txt', ownerId='1', sharedUsersIdWith
 
 ## Hexagonal architecture
 
-We use maven module to isolate layer of hexagonal architecture. Main modules **domain** and **infra** represent the two layers of a hexagonal architecure.
+We use maven module to isolate layer of hexagonal architecture. Main modules **domain** and **infra** represent the two layers of a hexagonal architecture.
 
 ```bash
 ├── domain
@@ -113,23 +113,26 @@ We use maven module to isolate layer of hexagonal architecture. Main modules **d
 │   │   ├── irc
 │   │   │   ├── pom.xml
 │   │   │   └── src
+│   │   ├── mail
+│   │   │   ├── pom.xml
+│   │   │   └── src
 │   └── pom.xml
 └── pom.xml
 ```
 
 ### Domain
 
-In hexagonal architecture domain represents only the business code of your application, no persitence, 
+In hexagonal architecture domain represents only the business code of your application, no persistence,
 no screen only business rule. When you want to add new business code you start in this module. More
 precisely you start writing your test first (I use cucumber, that allow me to make BDD), you can see all 
 scenarios in test/resources.
 
 The domain module must contains a minimum of dependencies (test dependencies and maybe guava).
 
-I create one hexagone `filemanager` with:
-- **api** represents what the hexagone offers (business functionalities)
-- **spi** represents what the hexagone need (i.e. persistence)
-- **core** represents the inside of the hexagone (where all the business code are)
+I create one hexagon `filemanager` with:
+- **api** represents what the hexagon offers (business functionality)
+- **spi** represents what the hexagon need (i.e. persistence)
+- **core** represents the inside of the hexagon (where all the business code are)
 
 ```bash
 ├── pom.xml
@@ -148,22 +151,24 @@ I create one hexagone `filemanager` with:
 ### Infra
 
 In hexagonal architecture Infra represents everything except the business code. 
-In this sample I groupe module by theme (application and persistence), obviously you can add other module like indexer with
+In this sample I group module by theme (application and persistence), obviously you can add other module like indexer with
 Elasticsearch, cloud application API, webservice REST or an other hexagonal architecture project.  
 
 #### How it's work?
 
 **persistence** directory contains two modules: in-memory and sql-spring-data. Both implements the 
-interface defined in the spi domain, here `FileRepository` that allow to `filemanager` hexagone to persist data.
+interface defined in the spi domain, here `FileRepository` that allow to `filemanager` hexagon to persist data.
 * **in-memory** very simple module using a simple in memory HashMap 
 * **sql-spring-data** more complex module using **Spring Boot** with **Spring Data JPA** and **Mapstruct** dependency with **H2** db
 
-**handler** directory contains one module: irc. Handler directory defines all the technologie we can use to send notification from the domain. Here we use IRC but we can use Slack or Twitter etc.
+**handler** directory defines all technologies we can use to send notification from the domain.
+* **irc** send event on an IRC channel
+* **mail** send event through mail
 
 **application** directory contains only one module **command-line**. Application module is little tricky, you need to connect 
-your hexagone with module defined in the **infra** layer. In this sample you can choose between to kind of persistence **in-memory** or **sql-spring-data**. 
+your hexagon with module defined in the **infra** layer. In this sample you can choose between to kind of persistence **in-memory** or **sql-spring-data**.
 * **command-line** module it's a very simple, it runs one action with a simple `println()`. You can create more complex application 
-module with a REST webservice for instance. The only thing you need to do is to inject dependencies that your hexagone need when the application start.
+module with a REST webservice for instance. The only thing you need to do is to inject dependencies that your hexagon need when the application start.
 * **rest-api** module it's REST api webservice sending action events on IRC chan
 
 ```bash
@@ -192,6 +197,11 @@ module with a REST webservice for instance. The only thing you need to do is to 
 │           └── test
 ├── handler
 │   └── irc
+│   │   ├── pom.xml
+│   │   └── src
+│   │       ├── main
+│   │       └── test
+│   └── mail
 │       ├── pom.xml
 │       └── src
 │           ├── main
@@ -224,33 +234,33 @@ The maven architecture looks like this:
                                         |                        |                        |
                                +--------+---------+    +---------+---------+    +---------+--------+
                                |                  |    |                   |    |                  |
-                               |     rest-api     |    |     in-memory     |    |  sql-spring-data |
+                               |     rest-api     |    |     in-memory     |    |        mail      |
                                |                  |    |                   |    |                  |
                                +------------------+    +-------------------+    +------------------+
 ```
 
 
 * `hexagonal-architecture-sample` pom will build all your module respecting the order of each module. 
-* `domain` is the first module to be build. As said in [Domain](#domain), the module depends only on a few external librayries (test only).
+* `domain` is the first module to be build. As said in [Domain](#domain), the module depends only on a few external libraries (test only).
 * `infra` will import the domain dependency for: `command-line`, `in-memory`, `sql-spring-data`. It's  allow a version coherency between the domain and infra layer. 
 
 ## Pro
 
-* Working with the architecture **help you** a lot. Let me explain, the fact that the business code is totaly isolate 
-from the rest ofthe world, it's help you to focus only on the business (no thinking about persistence or how you will display the
+* Working with the architecture **help you** a lot. Let me explain, the fact that the business code is totally isolate
+from the rest of the world, it's help you to focus only on the business (no thinking about persistence or how you will display the
 data on the screen, etc.). If you apply the Behavior Driven Development it will be very easy and very fast to create your business
 layer.
 * **You can think about the architecture later** (persistence, application, etc.). The hexagonal architecture help you to focus
-first on the business and after on what the business need: SQL bdd or noSQL bdd? Webservice or AngularJS application? Wich framework?
+first on the business and after on what the business need: SQL bdd or noSQL bdd? Webservice or AngularJS application? Which framework?
 * **Flexibility and decoupling**. In my sample, you can switch between to **in-memory** or **sql-spring-data** by changing one line.
-* **Isolated**. Every module can work on this own (with the external dependencis you want). 
+* **Isolated**. Every module can work on this own (with the external dependencies you want).
 
 ## Con
 
 * This sample is quite a `HelloWorld` so I don't know how this kind of architecture will be in a real world
-* **More code** :( Decoupling has the result of adding more code (essentialy adapter layer)
+* **More code** :( Decoupling has the result of adding more code (essentially adapter layer)
 
 ## Conclusion
 
-Today I am not mature enought on this architecture to give you more arguments. Don't hesitate to make PR on the readme or
+Today I am not mature enough on this architecture to give you more arguments. Don't hesitate to make PR on the readme or
 to propose improvement on my current architecture! 

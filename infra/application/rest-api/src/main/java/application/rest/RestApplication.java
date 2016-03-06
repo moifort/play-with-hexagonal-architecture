@@ -6,7 +6,7 @@ import domain.filemanager.api.FileManagerService;
 import domain.filemanager.core.FileManagerServiceImpl;
 import domain.filemanager.spi.FileEventHandler;
 import domain.filemanager.spi.FileRepository;
-import handler.mail.MailHandler;
+import handler.irc.IrcHandler;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -31,7 +31,7 @@ public class RestApplication extends Application<RestConfiguration> {
     public void run(RestConfiguration configuration, Environment environment) {
         // Init Domain
         FileRepository fileRepository = new InMemoryFileRepository();
-        FileEventHandler fileEventHandler = new MailHandler();//new IrcHandler();
+        FileEventHandler fileEventHandler = new IrcHandler();//new MailHandler();
         FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, fileEventHandler);
 
         // REST Dependency injection
