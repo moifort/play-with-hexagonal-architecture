@@ -2,7 +2,7 @@ package notification.irc;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.filemanager.spi.FileNotification;
+import domain.filemanager.spi.FileEventNotification;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -21,9 +21,9 @@ public class IrcHandlerTest {
             Thread.sleep(1000);
         }
 
-        ircHandler.sendNotification(FileNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        ircHandler.sendNotification(FileNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        ircHandler.sendNotification(FileNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
+        ircHandler.sendNotification(FileEventNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        ircHandler.sendNotification(FileEventNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        ircHandler.sendNotification(FileEventNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
 
         Thread.sleep(10000);
     }

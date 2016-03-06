@@ -6,17 +6,17 @@ import domain.filemanager.api.entity.Permission;
 import java.util.List;
 import java.util.Map;
 
-public interface FileNotification {
+public interface FileEventNotification {
     void sendNotification(Type type,
                           String userId,
                           List<File> files,
                           Map<String, Permission> sharedUsersIdWithPermission);
 
     enum Type {
-        ADD,
         GET,
+        GET_SHARE,
+        ADD,
         DELETE,
-        SHARE_WITH,
-        GET_SHARE
+        SHARE_WITH
     }
 }

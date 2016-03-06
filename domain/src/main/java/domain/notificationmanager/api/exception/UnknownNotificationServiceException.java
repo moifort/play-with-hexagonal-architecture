@@ -1,4 +1,4 @@
-package domain.notificationmanager.api.eception;
+package domain.notificationmanager.api.exception;
 
 public class UnknownNotificationServiceException extends RuntimeException {
 

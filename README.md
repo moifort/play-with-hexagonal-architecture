@@ -5,6 +5,9 @@ This project is a sample of an hexagonal architecture. This sample implements fu
 * Save/delete/get files
 * Permission on the file (owner of the file)
 * Sharing file (share the file with different permission to other user)
+* Send notification when save/delete/get/sharing are call
+
+* Notification manager that allow to implement several notification services (IRC, mail, etc.) and
 
 ## Requirement
 

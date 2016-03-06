@@ -2,12 +2,12 @@ package domain.filemanager.mock;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.filemanager.spi.FileNotification;
+import domain.filemanager.spi.FileEventNotification;
 
 import java.util.List;
 import java.util.Map;
 
-public class MockFileNotification implements FileNotification {
+public class MockFileEventNotification implements FileEventNotification {
     private Type type;
     private String userId;
     private List<File> files;

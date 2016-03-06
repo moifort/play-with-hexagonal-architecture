@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class InMemoryFileNotificationRepository implements domain.filemanager.spi.FileRepository, UserSettingNotificationRepository {
+public class InMemoryRepository implements domain.filemanager.spi.FileRepository, UserSettingNotificationRepository {
 
     /***********************
      *

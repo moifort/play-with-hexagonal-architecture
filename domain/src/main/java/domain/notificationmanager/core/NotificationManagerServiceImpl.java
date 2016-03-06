@@ -3,25 +3,20 @@ package domain.notificationmanager.core;
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 import domain.notificationmanager.api.NotificationManagerService;
-import domain.notificationmanager.api.eception.UnknownNotificationServiceException;
-import domain.notificationmanager.spi.FileNotificationService;
+import domain.notificationmanager.api.exception.UnknownNotificationServiceException;
+import domain.notificationmanager.spi.FileEventNotificationService;
 import domain.notificationmanager.spi.UserSettingNotificationRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class NotificationManagerServiceImpl implements NotificationManagerService {
-    private final List<FileNotificationService> fileEventHandlerServices;
+    private final List<FileEventNotificationService> fileEventHandlerServices;
     private final UserSettingNotificationRepository userSettingNotificationRepository;
     private final List<String> allServicesId;
 
-    public NotificationManagerServiceImpl(FileNotificationService fileEventHandlerServices, UserSettingNotificationRepository userSettingNotificationRepository) {
-        this(Collections.singletonList(fileEventHandlerServices), userSettingNotificationRepository);
-    }
-
-    public NotificationManagerServiceImpl(List<FileNotificationService> fileEventHandlerServices, UserSettingNotificationRepository userSettingNotificationRepository) {
+    public NotificationManagerServiceImpl(List<FileEventNotificationService> fileEventHandlerServices, UserSettingNotificationRepository userSettingNotificationRepository) {
         this.fileEventHandlerServices = fileEventHandlerServices;
         this.userSettingNotificationRepository = userSettingNotificationRepository;
         this.allServicesId = getServicesId(fileEventHandlerServices);
@@ -37,7 +32,7 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
 
     @Override
     public void sendNotification(Type type, String userId, List<File> files, Map<String, Permission> sharedUsersIdWithPermission) {
-        for (FileNotificationService fileEventHandlerService : fileEventHandlerServices) {
+        for (FileEventNotificationService fileEventHandlerService : fileEventHandlerServices) {
             if (isEventIsEnable(userId, type, fileEventHandlerService.getServiceId())) {
                 fileEventHandlerService.sendNotification(type, userId, files, sharedUsersIdWithPermission);
             }
@@ -52,7 +47,7 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
         return userSettingNotificationRepository.getUserNotificationSetting(userId, serviceName, type.name());
     }
 
-    private static List<String> getServicesId(List<FileNotificationService> fileEventHandlerServices) {
-        return fileEventHandlerServices.stream().map(FileNotificationService::getServiceId).collect(Collectors.toList());
+    private static List<String> getServicesId(List<FileEventNotificationService> fileEventHandlerServices) {
+        return fileEventHandlerServices.stream().map(FileEventNotificationService::getServiceId).collect(Collectors.toList());
     }
 }

@@ -2,7 +2,7 @@ package notification.irc;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.notificationmanager.spi.FileNotificationService;
+import domain.notificationmanager.spi.FileEventNotificationService;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class IrcHandler implements FileNotificationService {
+public class IrcHandler implements FileEventNotificationService {
 
     private final MyBot bot;
 

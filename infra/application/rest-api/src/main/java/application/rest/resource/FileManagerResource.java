@@ -29,6 +29,13 @@ public class FileManagerResource {
     }
 
     @GET
+    @Path("delete/{id}")
+    @Timed
+    public void deleteFile(@PathParam("id") Long id) {
+        fileManagerService.deleteFile(id.toString(), "Thibaut");
+    }
+
+    @GET
     @Path("/{id}")
     @Timed
     public FileDTO getFile(@PathParam("id") Long id) {

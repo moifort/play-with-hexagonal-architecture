@@ -10,9 +10,9 @@ import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 import domain.filemanager.core.FileManagerServiceImpl;
 import domain.filemanager.mock.MockFile;
-import domain.filemanager.mock.MockFileNotification;
+import domain.filemanager.mock.MockFileEventNotification;
 import domain.filemanager.mock.MockInMemoryFile;
-import domain.filemanager.spi.FileNotification;
+import domain.filemanager.spi.FileEventNotification;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FileManagerStepDefs {
 
     private MockInMemoryFile mockFileRepository;
-    private MockFileNotification mockFileEventHandler;
+    private MockFileEventNotification mockFileEventHandler;
     private FileManagerService fileManagerService;
 
     @Before
     public void setUp() throws Exception {
         mockFileRepository = new MockInMemoryFile();
-        mockFileEventHandler = new MockFileNotification();
+        mockFileEventHandler = new MockFileEventNotification();
         fileManagerService = new FileManagerServiceImpl(mockFileRepository, mockFileEventHandler);
     }
 
@@ -264,17 +264,17 @@ public class FileManagerStepDefs {
      * HOOK
      *********************************/
     @Then("^'(.*)' is triggered with '(.*)' user name and '(.*)' files id$")
-    public void methodEvent_is_triggered_with_owner_and_file(FileNotification.Type type, String userId, List<String> fileNames) {
+    public void methodEvent_is_triggered_with_owner_and_file(FileEventNotification.Type type, String userId, List<String> fileNames) {
         assertThat(mockFileEventHandler.getType()).isEqualTo(type);
         assertThat(mockFileEventHandler.getUserId()).isEqualTo(userId);
         assertThat(mockFileEventHandler.getFiles()).hasSize(fileNames.size());
-        if (!(type == FileNotification.Type.DELETE)){
+        if (!(type == FileEventNotification.Type.DELETE)){
             assertThat(mockFileEventHandler.getFiles()).isEqualTo(getFiles(fileNames));
         }
     }
 
     @Then("^'(.*)' is triggered with '(.*)' owner and '(.*)' file and '(.*)' shared user and '(.*)' permission$")
-    public void share_a_file_event_is_triggered_with_owner_and_file_and_shared_users_and_permission(FileNotification.Type type, String userId, String fileName, List<String> sharedUsers, String permission) {
+    public void share_a_file_event_is_triggered_with_owner_and_file_and_shared_users_and_permission(FileEventNotification.Type type, String userId, String fileName, List<String> sharedUsers, String permission) {
         assertThat(mockFileEventHandler.getType()).isEqualTo(type);
         assertThat(mockFileEventHandler.getUserId()).isEqualTo(userId);
         assertThat(mockFileEventHandler.getFiles()).isEqualTo(Collections.singletonList(getFile(fileName)));

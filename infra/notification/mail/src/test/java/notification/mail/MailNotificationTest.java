@@ -2,7 +2,7 @@ package notification.mail;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.filemanager.spi.FileNotification;
+import domain.filemanager.spi.FileEventNotification;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -14,11 +14,11 @@ public class MailNotificationTest {
 
     @Test
     public void testAddFileEvent_Should_When() throws Exception {
-        MailNotification mailNotification = new MailNotification("my@mail.com", "MyPassword", "main-send-to@test.com");
+        MailEventNotification mailNotification = new MailEventNotification("my@mail.com", "MyPassword", "main-send-to@test.com");
 
-        mailNotification.sendNotification(FileNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        mailNotification.sendNotification(FileNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        mailNotification.sendNotification(FileNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
+        mailNotification.sendNotification(FileEventNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        mailNotification.sendNotification(FileEventNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        mailNotification.sendNotification(FileEventNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
     }
 
     private static class MockFile implements File {

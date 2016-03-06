@@ -2,23 +2,23 @@ package domain.filemanager.mock;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.filemanager.spi.FileNotification;
+import domain.filemanager.spi.FileEventNotification;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MockFileEvenHandlerList implements FileNotification {
-    private final List<MockFileNotification> mockFileEventHandlerList = new ArrayList<>();
+public class MockFileEventEvenHandlerList implements FileEventNotification {
+    private final List<MockFileEventNotification> mockFileEventHandlerList = new ArrayList<>();
 
     @Override
     public void sendNotification(Type type, String userId, List<File> files, Map<String, Permission> sharedUsersIdWithPermission) {
-        MockFileNotification mockFileEventHandler = new MockFileNotification();
+        MockFileEventNotification mockFileEventHandler = new MockFileEventNotification();
         mockFileEventHandler.sendNotification(type, userId, files, sharedUsersIdWithPermission);
         mockFileEventHandlerList.add(mockFileEventHandler);
     }
 
-    public List<MockFileNotification> getMockFileEventHandlerList() {
+    public List<MockFileEventNotification> getMockFileEventHandlerList() {
         return mockFileEventHandlerList;
     }
 }

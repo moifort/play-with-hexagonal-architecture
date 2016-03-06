@@ -3,13 +3,13 @@ package application.commandline;
 import domain.filemanager.api.FileManagerService;
 import domain.filemanager.api.entity.File;
 import domain.filemanager.core.FileManagerServiceImpl;
-import domain.filemanager.spi.FileNotification;
+import domain.filemanager.spi.FileEventNotification;
 import domain.notificationmanager.api.NotificationManagerService;
 import domain.notificationmanager.core.NotificationManagerServiceImpl;
-import domain.notificationmanager.spi.FileNotificationService;
+import domain.notificationmanager.spi.FileEventNotificationService;
 import notification.irc.IrcHandler;
-import notification.mail.MailNotification;
-import persistence.inmemory.repository.InMemoryFileNotificationRepository;
+import notification.mail.MailEventNotification;
+import persistence.inmemory.repository.InMemoryRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,11 +21,11 @@ public class Application {
         /***** Init *****/
         // Repository
         //FileRepository fileRepository = SQLPersistence.get();
-        InMemoryFileNotificationRepository fileRepository = new InMemoryFileNotificationRepository();
+        InMemoryRepository fileRepository = new InMemoryRepository();
 
         // Notification Service
-        FileNotificationService mailNotificationService = new MailNotification("sender@gmail.com", "mypasswort", "thibaut.mottet@gmail.com");
-        FileNotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
+        FileEventNotificationService mailNotificationService = new MailEventNotification("sender@gmail.com", "mypassword", "thibaut.mottet@gmail.com");
+        FileEventNotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
         NotificationManagerService notificationManagerService = new NotificationManagerServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
                 fileRepository);
@@ -37,13 +37,13 @@ public class Application {
         /***** Run *****/
         notificationManagerService.setUserSettingNotification("Thibaut",
                 Collections.emptyList(),
-                Collections.singletonList(FileNotification.Type.DELETE),
+                Collections.singletonList(FileEventNotification.Type.DELETE),
                 true);
         System.out.println("Thibaut accept to receive delete file notification through all services");
 
         notificationManagerService.setUserSettingNotification("Thibaut",
                 Collections.singletonList(ircNotificationService.getServiceId()),
-                Collections.singletonList(FileNotification.Type.GET),
+                Collections.singletonList(FileEventNotification.Type.GET),
                 true);
         System.out.println("Thibaut accept to receive get file notification through"+ ircNotificationService.getServiceId());
 
@@ -55,7 +55,7 @@ public class Application {
 
         notificationManagerService.setUserSettingNotification("Thibaut",
                 Collections.singletonList(mailNotificationService.getServiceId()),
-                Collections.singletonList(FileNotification.Type.ADD),
+                Collections.singletonList(FileEventNotification.Type.ADD),
                 true);
         System.out.println("Thibaut accept to receive add file notification through"+ mailNotificationService.getServiceId());
 
