@@ -13,11 +13,13 @@
     <packaging>pom</packaging>
     <modules>
         <module>application/command-line</module>
+        <module>application/rest-api</module>
 
         <module>persistence/in-memory</module>
         <module>persistence/sql-spring-data</module>
-        <module>application/rest-api</module>
+
         <module>handler/irc</module>
+        <module>handler/mail</module>
     </modules>
 
     <dependencies>

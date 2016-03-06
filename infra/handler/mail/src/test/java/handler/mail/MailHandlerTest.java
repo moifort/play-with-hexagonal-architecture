@@ -1,4 +1,4 @@
-package handler.irc;
+package handler.mail;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
@@ -9,25 +9,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class IrcHandlerTest {
-
+public class MailHandlerTest {
 
     @Test
-    public void testIrcEvent() throws Exception {
-        IrcHandler ircHandler = new IrcHandler();
+    public void testAddFileEvent_Should_When() throws Exception {
+        MailHandler mailHandler = new MailHandler();
 
-        while(!ircHandler.isConnected()) {
-            Thread.sleep(1000);
-        }
-
-        ircHandler.getFileEvent("Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")));
-        ircHandler.getSharedFileEvent("Thibaut", Arrays.asList(new MockFile("0", "SharedFile1"), new MockFile("1", "SharedFile2")));
-        ircHandler.addFileEvent("Thibaut", new MockFile("0", "File1"));
-        ircHandler.deleteFileEvent("Thibaut", new MockFile("0", "File1"));
-        ircHandler.shareFileEvent("Thibaut", new MockFile("0", "File1"), Collections.singletonMap("Maxime", Permission.GET));
-
-
-        Thread.sleep(10000);
+        mailHandler.getFileEvent("Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")));
+        mailHandler.getSharedFileEvent("Thibaut", Arrays.asList(new MockFile("0", "SharedFile1"), new MockFile("1", "SharedFile2")));
+        mailHandler.addFileEvent("Thibaut", new MockFile("0", "File1"));
+        mailHandler.deleteFileEvent("Thibaut", new MockFile("0", "File1"));
+        mailHandler.shareFileEvent("Thibaut", new MockFile("0", "File1"), Collections.singletonMap("Maxime", Permission.GET));
     }
 
     private static class MockFile implements File {
