@@ -20,7 +20,7 @@ To build the project execute in the root directory:
 ./mvnw clean install
 ```
 
-### Simple REST API with IRC Event handler
+### Simple REST API with IRC notification service
 
 Before to run, you need to build the application (see below). To run the application execute in the root directory:
 
@@ -171,7 +171,7 @@ interface defined in the spi domain, here `FileRepository` that allow to `filema
 * **in-memory** very simple module using a simple in memory HashMap 
 * **sql-spring-data** more complex module using **Spring Boot** with **Spring Data JPA** and **Mapstruct** dependency with **H2** db
 
-**handler** directory defines all technologies we can use to send notification from the domain.
+**notification** directory defines all technologies we can use to send notification from the domain.
 * **irc** send event on an IRC channel
 * **mail** send event through mail
 
