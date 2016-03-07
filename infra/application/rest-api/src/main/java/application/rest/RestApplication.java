@@ -5,14 +5,16 @@ import application.rest.resource.FileManagerResource;
 import domain.filemanager.api.FileManagerService;
 import domain.filemanager.core.FileManagerServiceImpl;
 import domain.filemanager.spi.FileEventNotification;
-import domain.notificationmanager.api.NotificationManagerService;
-import domain.notificationmanager.core.NotificationManagerServiceImpl;
-import domain.notificationmanager.spi.NotificationService;
+import domain.notificationcenter.api.NotificationCenterService;
+import domain.notificationcenter.core.NotificationCenterServiceImpl;
+import domain.notificationcenter.spi.NotificationService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import notification.irc.configuration.IrcConfigurationBuilder;
 import notification.irc.IrcNotification;
 import notification.mail.MailNotification;
+import notification.mail.configuration.MailConfigurationBuilder;
 import persistence.inmemory.repository.InMemoryRepositoryNotification;
 
 import java.util.Arrays;
@@ -37,25 +39,35 @@ public class RestApplication extends Application<RestConfiguration> {
     public void run(RestConfiguration configuration, Environment environment) {
         // Init Domain
         InMemoryRepositoryNotification fileRepository = new InMemoryRepositoryNotification();
-        NotificationService mailNotificationService = new MailNotification("thibaut@alantaya.com", "mypassword", "thibaut.mottet@gmail.com");
-        NotificationService ircNotificationService = new IrcNotification("irc.freenode.org","#HewaBot");
-        NotificationManagerService notificationManagerService = new NotificationManagerServiceImpl(
+        InMemoryRepositoryNotification notificationRepository = new InMemoryRepositoryNotification();
+
+        // Notification Service
+        NotificationService mailNotificationService = new MailNotification("thibaut@alantaya.com", "###########");
+        NotificationService ircNotificationService = new IrcNotification("irc.freenode.org");
+        NotificationCenterService notificationCenterService = new NotificationCenterServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
-                fileRepository);
+                notificationRepository,
+                notificationRepository);
 
         // File Manager
-        FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, notificationManagerService);
+        FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, notificationCenterService);
+
+        // Set Notification service
+        notificationCenterService.setUserServiceConfiguration("Thibaut",
+                new IrcConfigurationBuilder().setChannel("#HexagonalIsAwsome").build());
+        notificationCenterService.setUserServiceConfiguration("Thibaut",
+                new MailConfigurationBuilder().setEmail("thibaut.mottet@gmail.com").build());
 
         // Set notification parameter to user
-        notificationManagerService.setUserNotificationSetting("Thibaut",
+        notificationCenterService.setUserNotificationSetting("Thibaut",
                 Collections.emptyList(),
                 Collections.singletonList(FileEventNotification.Type.DELETE),
                 true);
-        notificationManagerService.setUserNotificationSetting("Thibaut",
+        notificationCenterService.setUserNotificationSetting("Thibaut",
                 Collections.singletonList(ircNotificationService.getServiceId()),
                 Collections.singletonList(FileEventNotification.Type.GET),
                 true);
-        notificationManagerService.setUserNotificationSetting("Thibaut",
+        notificationCenterService.setUserNotificationSetting("Thibaut",
                 Collections.singletonList(mailNotificationService.getServiceId()),
                 Collections.singletonList(FileEventNotification.Type.ADD),
                 true);

@@ -1,4 +1,4 @@
-package domain.notificationmanager.api.exception;
+package domain.notificationcenter.api.exception;
 
 public class ServiceNotificationInternalException extends RuntimeException {
 

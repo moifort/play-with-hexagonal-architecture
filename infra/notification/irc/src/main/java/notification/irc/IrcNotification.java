@@ -2,7 +2,11 @@ package notification.irc;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.notificationmanager.spi.NotificationService;
+import domain.filemanager.spi.FileEventNotification;
+import domain.notificationcenter.api.NotificationServiceConfiguration;
+import domain.notificationcenter.spi.NotificationService;
+import notification.irc.configuration.IrcConfiguration;
+import notification.irc.configuration.IrcConfigurationParser;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,10 +15,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class IrcNotification implements NotificationService {
-
     private final MyBot bot;
 
-    public IrcNotification(String ircServer, String channel) {
+    public IrcNotification(String ircServer) {
         this.bot = new MyBot();
         try {
             // Enable debugging output.
@@ -23,8 +26,6 @@ public class IrcNotification implements NotificationService {
             // Connect to the IRC server.
             bot.connect(ircServer);
 
-            // Join the #pircbot channel.
-            bot.joinChannel(channel);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class IrcNotification implements NotificationService {
 
     @Override
     public String getServiceId() {
-        return "irc";
+        return IrcConfiguration.SERVICE_ID;
     }
 
     public boolean isConnected() {
@@ -40,11 +41,15 @@ public class IrcNotification implements NotificationService {
     }
 
     @Override
-    public void sendNotification(Type type, String userId, List<File> files, Map<String, Permission> sharedUsersIdWithPermission) {
-        if (type == Type.SHARE_WITH) {
-            bot.sendMessage("#HewaBot", userId + " share file: " + displayFiles(files) + " with " + sharedUsersIdWithPermission.toString());
+    public void sendNotification(NotificationServiceConfiguration serviceConfiguration, FileEventNotification.Type type, String userId, List<File> files, Map<String, Permission> sharedUsersIdWithPermission) {
+        IrcConfigurationParser configurationParser = new IrcConfigurationParser(serviceConfiguration);
+        String channel = configurationParser.getChannel();
+
+        bot.joinChannel(channel);
+        if (type == FileEventNotification.Type.SHARE_WITH) {
+            bot.sendMessage(channel, userId + " share file: " + displayFiles(files) + " with " + sharedUsersIdWithPermission.toString());
         } else {
-            bot.sendMessage("#HewaBot", userId + " " + type.name() + " file(s): " + displayFiles(files));
+            bot.sendMessage(channel, userId + " " + type.name() + " file(s): " + displayFiles(files));
         }
     }
 
@@ -60,8 +65,8 @@ public class IrcNotification implements NotificationService {
     private static String join(Collection var0, String var1) {
         StringBuffer var2 = new StringBuffer();
 
-        for(Iterator var3 = var0.iterator(); var3.hasNext(); var2.append((String)var3.next())) {
-            if(var2.length() != 0) {
+        for (Iterator var3 = var0.iterator(); var3.hasNext(); var2.append((String) var3.next())) {
+            if (var2.length() != 0) {
                 var2.append(var1);
             }
         }

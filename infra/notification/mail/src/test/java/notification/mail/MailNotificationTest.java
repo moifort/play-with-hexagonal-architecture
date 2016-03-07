@@ -3,6 +3,9 @@ package notification.mail;
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
 import domain.filemanager.spi.FileEventNotification;
+import domain.notificationcenter.api.NotificationServiceConfiguration;
+import notification.mail.configuration.MailConfigurationBuilder;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -12,13 +15,20 @@ import java.util.Map;
 
 public class MailNotificationTest {
 
+    private MailNotification mailNotification;
+    private NotificationServiceConfiguration configuration;
+
+    @Before
+    public void setUp() throws Exception {
+        mailNotification = new MailNotification("test@mail.com", "testPassword");
+        configuration = new MailConfigurationBuilder().setEmail("test-to-send@mail.com").build();
+    }
+
     @Test
     public void testAddFileEvent_Should_When() throws Exception {
-        MailNotification mailNotification = new MailNotification("my@mail.com", "MyPassword", "main-send-to@test.com");
-
-        mailNotification.sendNotification(FileEventNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        mailNotification.sendNotification(FileEventNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        mailNotification.sendNotification(FileEventNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
+        mailNotification.sendNotification(configuration, FileEventNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        mailNotification.sendNotification(configuration, FileEventNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        mailNotification.sendNotification(configuration, FileEventNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
     }
 
     private static class MockFile implements File {

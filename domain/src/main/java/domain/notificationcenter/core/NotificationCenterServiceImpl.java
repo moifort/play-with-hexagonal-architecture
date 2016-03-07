@@ -1,26 +1,27 @@
-package domain.notificationmanager.core;
+package domain.notificationcenter.core;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.notificationmanager.api.NotificationManagerService;
-import domain.notificationmanager.api.exception.UnknownNotificationServiceException;
-import domain.notificationmanager.spi.NotificationService;
-import domain.notificationmanager.spi.NotificationSettingRepository;
-import domain.notificationmanager.spi.ServiceConfigurationRepository;
+import domain.notificationcenter.api.NotificationServiceConfiguration;
+import domain.notificationcenter.spi.NotificationService;
+import domain.notificationcenter.api.NotificationCenterService;
+import domain.notificationcenter.api.exception.UnknownNotificationServiceException;
+import domain.notificationcenter.spi.NotificationSettingRepository;
+import domain.notificationcenter.spi.ServiceConfigurationRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class NotificationManagerServiceImpl implements NotificationManagerService {
+public class NotificationCenterServiceImpl implements NotificationCenterService {
     private final List<NotificationService> fileEventHandlerServices;
     private final NotificationSettingRepository notificationSettingRepository;
     private final ServiceConfigurationRepository serviceConfigurationRepository;
     private final List<String> registeredServicesId;
 
-    public NotificationManagerServiceImpl(List<NotificationService> fileEventHandlerServices,
-                                          NotificationSettingRepository notificationSettingRepository,
-                                          ServiceConfigurationRepository serviceConfigurationRepository) {
+    public NotificationCenterServiceImpl(List<NotificationService> fileEventHandlerServices,
+                                         NotificationSettingRepository notificationSettingRepository,
+                                         ServiceConfigurationRepository serviceConfigurationRepository) {
         this.fileEventHandlerServices = fileEventHandlerServices;
         this.notificationSettingRepository = notificationSettingRepository;
         this.serviceConfigurationRepository = serviceConfigurationRepository;
@@ -36,19 +37,26 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
     }
 
     @Override
-    public void setUserServiceConfiguration(String userId, String serviceId, Map<String, String> serviceConfiguration) {
-        serviceConfigurationRepository.saveServiceConfiguration(userId, serviceId, serviceConfiguration);
+    public void setUserServiceConfiguration(String userId, NotificationServiceConfiguration notificationServiceConfiguration) {
+        serviceConfigurationRepository.saveServiceConfiguration(userId,
+                notificationServiceConfiguration.getServiceId(),
+                notificationServiceConfiguration.getSettings());
     }
 
     @Override
     public void sendNotification(Type type, String userId, List<File> files, Map<String, Permission> sharedUsersIdWithPermission) {
         for (NotificationService fileEventHandlerService : fileEventHandlerServices) {
             String serviceId = fileEventHandlerService.getServiceId();
-            Map<String, String> configurationSettings = serviceConfigurationRepository.getServiceConfiguration(userId, serviceId);
+            NotificationServiceConfiguration notificationServiceConfiguration = getServiceConfiguration(userId, serviceId);
             if (notificationIsEnable(userId, type, serviceId)) {
-                fileEventHandlerService.sendNotification(configurationSettings, type, userId, files, sharedUsersIdWithPermission);
+                fileEventHandlerService.sendNotification(notificationServiceConfiguration, type, userId, files, sharedUsersIdWithPermission);
             }
         }
+    }
+
+    private NotificationServiceConfiguration getServiceConfiguration(String userId, String serviceId) {
+        Map<String, String> settings = serviceConfigurationRepository.getServiceConfiguration(userId, serviceId);
+        return new NotificationServiceConfigurationImpl(serviceId, settings);
     }
 
     private boolean atLeastOneServiceIsUnknown(List<String> servicesId) {

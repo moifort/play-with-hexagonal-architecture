@@ -1,6 +1,6 @@
-package domain.notificationmanager.mock;
+package domain.notificationcenter.mock;
 
-import domain.notificationmanager.spi.NotificationSettingRepository;
+import domain.notificationcenter.spi.NotificationSettingRepository;
 
 import java.util.HashMap;
 import java.util.List;

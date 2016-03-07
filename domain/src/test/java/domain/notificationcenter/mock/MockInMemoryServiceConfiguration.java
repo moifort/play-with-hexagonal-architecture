@@ -1,6 +1,6 @@
-package domain.notificationmanager.mock;
+package domain.notificationcenter.mock;
 
-import domain.notificationmanager.spi.ServiceConfigurationRepository;
+import domain.notificationcenter.spi.ServiceConfigurationRepository;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,24 +8,24 @@ import java.util.Map;
 
 public class MockInMemoryServiceConfiguration implements ServiceConfigurationRepository {
 
-    private final Map<SettingKey, Map<String, String>> userServiceConfigurationSettings = new HashMap<>();
+    private final Map<ConfigurationSettingKey, Map<String, String>> userServiceConfigurationSettings = new HashMap<>();
 
     @Override
     public void saveServiceConfiguration(String userId, String serviceId, Map<String, String> serviceConfiguration) {
-        userServiceConfigurationSettings.put(new SettingKey(userId, serviceId), serviceConfiguration);
+        userServiceConfigurationSettings.put(new ConfigurationSettingKey(userId, serviceId), serviceConfiguration);
     }
 
     @Override
     public Map<String, String> getServiceConfiguration(String userId, String serviceId) {
-        if (!userServiceConfigurationSettings.containsKey(new SettingKey(userId, serviceId))) return Collections.emptyMap();
-        return userServiceConfigurationSettings.get(new SettingKey(userId, serviceId));
+        if (!userServiceConfigurationSettings.containsKey(new ConfigurationSettingKey(userId, serviceId))) return Collections.emptyMap();
+        return userServiceConfigurationSettings.get(new ConfigurationSettingKey(userId, serviceId));
     }
 
-    private static class SettingKey {
+    private static class ConfigurationSettingKey {
         private String userId;
         private String serviceId;
 
-        public SettingKey(String userId, String serviceId) {
+        public ConfigurationSettingKey(String userId, String serviceId) {
             this.userId = userId;
             this.serviceId = serviceId;
         }
@@ -43,7 +43,7 @@ public class MockInMemoryServiceConfiguration implements ServiceConfigurationRep
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            SettingKey that = (SettingKey) o;
+            ConfigurationSettingKey that = (ConfigurationSettingKey) o;
 
             if (serviceId != null ? !serviceId.equals(that.serviceId) : that.serviceId != null) return false;
             if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;

@@ -1,4 +1,4 @@
-package domain.notificationmanager.spi;
+package domain.notificationcenter.spi;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-Feature: Notification manager
+Feature: Notification center
 
   Scenario: User enable 'add file' and 'get file' notification without service send notification for all services
     Given 'Thibaut' configure 'ServiceOne' with 'email'='thibaut@mail.com'

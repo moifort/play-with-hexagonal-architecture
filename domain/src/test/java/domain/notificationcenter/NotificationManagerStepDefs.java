@@ -1,4 +1,4 @@
-package domain.notificationmanager;
+package domain.notificationcenter;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.en.But;
@@ -8,11 +8,12 @@ import cucumber.api.java.en.When;
 import domain.filemanager.mock.MockFile;
 import domain.filemanager.mock.MockFileEventNotification;
 import domain.filemanager.spi.FileEventNotification;
-import domain.notificationmanager.core.NotificationManagerServiceImpl;
-import domain.notificationmanager.mock.MockEventNotificationServiceOne;
-import domain.notificationmanager.mock.MockEventNotificationServiceTwo;
-import domain.notificationmanager.mock.MockInMemoryNotificationSetting;
-import domain.notificationmanager.mock.MockInMemoryServiceConfiguration;
+import domain.notificationcenter.core.NotificationCenterServiceImpl;
+import domain.notificationcenter.core.NotificationServiceConfigurationImpl;
+import domain.notificationcenter.mock.MockEventNotificationServiceOne;
+import domain.notificationcenter.mock.MockEventNotificationServiceTwo;
+import domain.notificationcenter.mock.MockInMemoryNotificationSetting;
+import domain.notificationcenter.mock.MockInMemoryServiceConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotificationManagerStepDefs {
-    private NotificationManagerServiceImpl notificationManagerService;
+    private NotificationCenterServiceImpl notificationManagerService;
     private MockEventNotificationServiceOne mockNotificationServiceOne;
     private MockEventNotificationServiceTwo mockNotificationServiceTwo;
     private MockInMemoryNotificationSetting mockInMemoryUserEventSettings;
@@ -34,7 +35,7 @@ public class NotificationManagerStepDefs {
         mockNotificationServiceTwo = new MockEventNotificationServiceTwo();
         mockInMemoryUserEventSettings = new MockInMemoryNotificationSetting();
         mockInMemoryUserServiceConfigurationSettings = new MockInMemoryServiceConfiguration();
-        notificationManagerService = new NotificationManagerServiceImpl(
+        notificationManagerService = new NotificationCenterServiceImpl(
                 Arrays.asList(mockNotificationServiceOne, mockNotificationServiceTwo),
                 mockInMemoryUserEventSettings,
                 mockInMemoryUserServiceConfigurationSettings);
@@ -132,7 +133,7 @@ public class NotificationManagerStepDefs {
 
     @Given("^'(.*)' configure '(.*)' with '(.*)'='(.*)'$")
     public void user_configure_service_with_key_value(String userId, String serviceId, String key, String value) throws Throwable {
-        notificationManagerService.setUserServiceConfiguration(userId, serviceId, Collections.singletonMap(key, value));
+        notificationManagerService.setUserServiceConfiguration(userId, new NotificationServiceConfigurationImpl(serviceId, Collections.singletonMap(key, value)));
     }
 
     @Then("^'(.*)' receive '(.*)' notification, '(.*)' is throw$")
