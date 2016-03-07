@@ -13,12 +13,5 @@
         vm.navCollapsed = true;
         vm.inProduction = ENV === 'prod';
         vm.$state = $state;
-
-        function login () {
-        }
-
-        function logout () {
-            $state.go('home');
-        }
     }
 })();

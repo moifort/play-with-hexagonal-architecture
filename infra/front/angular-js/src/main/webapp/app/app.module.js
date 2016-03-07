@@ -14,7 +14,6 @@
             'ui.router',
             'infinite-scroll',
             'angular-loading-bar'
-        ])
-        .run();
+        ]);
 
 })();

@@ -9,7 +9,7 @@
                   '</div>',
         controller: jhiAlertErrorController
     };
-    
+
     angular
         .module('jhipsterApp')
         .component('jhiAlertError', jhiAlertError);
@@ -21,7 +21,7 @@
 
         vm.alerts = [];
 
-        function addErrorAlert (message, key, data) {
+        function addErrorAlert (message) {
             vm.alerts.push(
                 AlertService.add(
                     {
