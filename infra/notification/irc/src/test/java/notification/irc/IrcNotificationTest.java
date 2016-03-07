@@ -10,20 +10,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class IrcHandlerTest {
+public class IrcNotificationTest {
 
 
     @Test
     public void testIrcEvent() throws Exception {
-        IrcHandler ircHandler = new IrcHandler("irc.freenode.org","#HewaBot");
+        IrcNotification ircNotification = new IrcNotification("irc.freenode.org","#HewaBot");
 
-        while(!ircHandler.isConnected()) {
+        while(!ircNotification.isConnected()) {
             Thread.sleep(1000);
         }
 
-        ircHandler.sendNotification(FileEventNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        ircHandler.sendNotification(FileEventNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
-        ircHandler.sendNotification(FileEventNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
+        ircNotification.sendNotification(FileEventNotification.Type.ADD, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        ircNotification.sendNotification(FileEventNotification.Type.DELETE, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.emptyMap());
+        ircNotification.sendNotification(FileEventNotification.Type.SHARE_WITH, "Thibaut", Arrays.asList(new MockFile("0", "File1"), new MockFile("1", "File2")), Collections.singletonMap("Maxime", Permission.GET));
 
         Thread.sleep(10000);
     }

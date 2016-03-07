@@ -7,8 +7,8 @@ import domain.filemanager.spi.FileEventNotification;
 import domain.notificationmanager.api.NotificationManagerService;
 import domain.notificationmanager.core.NotificationManagerServiceImpl;
 import domain.notificationmanager.spi.NotificationService;
-import notification.irc.IrcHandler;
-import notification.mail.MailEventNotification;
+import notification.irc.IrcNotification;
+import notification.mail.MailNotification;
 import persistence.inmemory.repository.InMemoryRepositoryNotification;
 
 import java.util.Arrays;
@@ -24,8 +24,8 @@ public class Application {
         InMemoryRepositoryNotification fileRepository = new InMemoryRepositoryNotification();
 
         // Notification Service
-        NotificationService mailNotificationService = new MailEventNotification("sender@gmail.com", "mypassword", "thibaut.mottet@gmail.com");
-        NotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
+        NotificationService mailNotificationService = new MailNotification("sender@gmail.com", "mypassword", "thibaut.mottet@gmail.com");
+        NotificationService ircNotificationService = new IrcNotification("irc.freenode.org","#HewaBot");
         NotificationManagerService notificationManagerService = new NotificationManagerServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
                 fileRepository);

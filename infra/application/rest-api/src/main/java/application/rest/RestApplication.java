@@ -11,8 +11,8 @@ import domain.notificationmanager.spi.NotificationService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import notification.irc.IrcHandler;
-import notification.mail.MailEventNotification;
+import notification.irc.IrcNotification;
+import notification.mail.MailNotification;
 import persistence.inmemory.repository.InMemoryRepositoryNotification;
 
 import java.util.Arrays;
@@ -37,8 +37,8 @@ public class RestApplication extends Application<RestConfiguration> {
     public void run(RestConfiguration configuration, Environment environment) {
         // Init Domain
         InMemoryRepositoryNotification fileRepository = new InMemoryRepositoryNotification();
-        NotificationService mailNotificationService = new MailEventNotification("thibaut@alantaya.com", "mypassword", "thibaut.mottet@gmail.com");
-        NotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
+        NotificationService mailNotificationService = new MailNotification("thibaut@alantaya.com", "mypassword", "thibaut.mottet@gmail.com");
+        NotificationService ircNotificationService = new IrcNotification("irc.freenode.org","#HewaBot");
         NotificationManagerService notificationManagerService = new NotificationManagerServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
                 fileRepository);

@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MailEventNotification implements NotificationService {
+public class MailNotification implements NotificationService {
 
     private final Session session;
     private final String mailSendTo;
@@ -23,7 +23,7 @@ public class MailEventNotification implements NotificationService {
         return "mail";
     }
 
-    public MailEventNotification(final String username, final String password, String mailSendTo) {
+    public MailNotification(final String username, final String password, String mailSendTo) {
         this.mailSendTo = mailSendTo;
 
         Properties props = new Properties();

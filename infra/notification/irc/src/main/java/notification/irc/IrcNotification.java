@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class IrcHandler implements NotificationService {
+public class IrcNotification implements NotificationService {
 
     private final MyBot bot;
 
-    public IrcHandler(String ircServer, String channel) {
+    public IrcNotification(String ircServer, String channel) {
         this.bot = new MyBot();
         try {
             // Enable debugging output.
