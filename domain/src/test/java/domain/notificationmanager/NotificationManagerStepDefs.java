@@ -9,9 +9,10 @@ import domain.filemanager.mock.MockFile;
 import domain.filemanager.mock.MockFileEventNotification;
 import domain.filemanager.spi.FileEventNotification;
 import domain.notificationmanager.core.NotificationManagerServiceImpl;
-import domain.notificationmanager.mock.MockInMemoryUserNotificationSettings;
 import domain.notificationmanager.mock.MockEventNotificationServiceOne;
 import domain.notificationmanager.mock.MockEventNotificationServiceTwo;
+import domain.notificationmanager.mock.MockInMemoryNotificationSetting;
+import domain.notificationmanager.mock.MockInMemoryServiceConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,30 +22,33 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotificationManagerStepDefs {
-    private NotificationManagerServiceImpl handlerManagerService;
+    private NotificationManagerServiceImpl notificationManagerService;
     private MockEventNotificationServiceOne mockNotificationServiceOne;
     private MockEventNotificationServiceTwo mockNotificationServiceTwo;
-    private MockInMemoryUserNotificationSettings mockInMemoryUserEventSettings;
+    private MockInMemoryNotificationSetting mockInMemoryUserEventSettings;
+    private MockInMemoryServiceConfiguration mockInMemoryUserServiceConfigurationSettings;
 
     @Before
     public void setUp() throws Exception {
         mockNotificationServiceOne = new MockEventNotificationServiceOne();
         mockNotificationServiceTwo = new MockEventNotificationServiceTwo();
-        mockInMemoryUserEventSettings = new MockInMemoryUserNotificationSettings();
-        handlerManagerService = new NotificationManagerServiceImpl(
+        mockInMemoryUserEventSettings = new MockInMemoryNotificationSetting();
+        mockInMemoryUserServiceConfigurationSettings = new MockInMemoryServiceConfiguration();
+        notificationManagerService = new NotificationManagerServiceImpl(
                 Arrays.asList(mockNotificationServiceOne, mockNotificationServiceTwo),
-                mockInMemoryUserEventSettings);
+                mockInMemoryUserEventSettings,
+                mockInMemoryUserServiceConfigurationSettings);
     }
 
     @Given("^'(.*)' set '(.*)' notification setting to '(.*)' for '(.*)'$")
     public void user_set_notificationTypes_notification_setting_to_trueOrFalse_for_selectedServices(String userId, List<FileEventNotification.Type> types,  boolean isEnable, List<String> servicesId) throws Throwable {
-        handlerManagerService.setUserSettingNotification(userId, servicesId, types, isEnable);
+        notificationManagerService.setUserNotificationSetting(userId, servicesId, types, isEnable);
     }
 
     @When("^'(.*)' receive '(.*)' notification$")
     public void user_receive_notificationTypes_notification(String userId, List<FileEventNotification.Type> types) throws Throwable {
         types.stream().forEach(type ->
-                        handlerManagerService.sendNotification(
+                        notificationManagerService.sendNotification(
                                 type,
                                 userId,
                                 Collections.singletonList(new MockFile("NewFile", userId)),
@@ -116,7 +120,35 @@ public class NotificationManagerStepDefs {
 
         // Exercise
         try {
-            handlerManagerService.setUserSettingNotification(userId, servicesId, types, isEnable);
+            notificationManagerService.setUserNotificationSetting(userId, servicesId, types, isEnable);
+        } catch (Exception e) {
+            exception = e;
+        }
+
+        // Verify
+        assertThat(exception).isNotNull();
+        assertThat(exception.getClass().getSimpleName()).isEqualTo(throwClassName);
+    }
+
+    @Given("^'(.*)' configure '(.*)' with '(.*)'='(.*)'$")
+    public void user_configure_service_with_key_value(String userId, String serviceId, String key, String value) throws Throwable {
+        notificationManagerService.setUserServiceConfiguration(userId, serviceId, Collections.singletonMap(key, value));
+    }
+
+    @Then("^'(.*)' receive '(.*)' notification, '(.*)' is throw$")
+    public void user_receive_notification_Exception_is_throw(String userId, List<FileEventNotification.Type> types, String throwClassName) throws Throwable {
+        // Setup
+        Exception exception = null;
+
+        // Exercise
+        try {
+            types.stream().forEach(type ->
+                            notificationManagerService.sendNotification(
+                                    type,
+                                    userId,
+                                    Collections.singletonList(new MockFile("NewFile", userId)),
+                                    Collections.emptyMap())
+            );
         } catch (Exception e) {
             exception = e;
         }

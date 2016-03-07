@@ -7,13 +7,13 @@ import domain.filemanager.core.FileManagerServiceImpl;
 import domain.filemanager.spi.FileEventNotification;
 import domain.notificationmanager.api.NotificationManagerService;
 import domain.notificationmanager.core.NotificationManagerServiceImpl;
-import domain.notificationmanager.spi.FileEventNotificationService;
+import domain.notificationmanager.spi.NotificationService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import notification.irc.IrcHandler;
 import notification.mail.MailEventNotification;
-import persistence.inmemory.repository.InMemoryRepository;
+import persistence.inmemory.repository.InMemoryRepositoryNotification;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,9 +36,9 @@ public class RestApplication extends Application<RestConfiguration> {
     @Override
     public void run(RestConfiguration configuration, Environment environment) {
         // Init Domain
-        InMemoryRepository fileRepository = new InMemoryRepository();
-        FileEventNotificationService mailNotificationService = new MailEventNotification("thibaut@alantaya.com", "mypassword", "thibaut.mottet@gmail.com");
-        FileEventNotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
+        InMemoryRepositoryNotification fileRepository = new InMemoryRepositoryNotification();
+        NotificationService mailNotificationService = new MailEventNotification("thibaut@alantaya.com", "mypassword", "thibaut.mottet@gmail.com");
+        NotificationService ircNotificationService = new IrcHandler("irc.freenode.org","#HewaBot");
         NotificationManagerService notificationManagerService = new NotificationManagerServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
                 fileRepository);
@@ -47,15 +47,15 @@ public class RestApplication extends Application<RestConfiguration> {
         FileManagerService fileManagerService = new FileManagerServiceImpl(fileRepository, notificationManagerService);
 
         // Set notification parameter to user
-        notificationManagerService.setUserSettingNotification("Thibaut",
+        notificationManagerService.setUserNotificationSetting("Thibaut",
                 Collections.emptyList(),
                 Collections.singletonList(FileEventNotification.Type.DELETE),
                 true);
-        notificationManagerService.setUserSettingNotification("Thibaut",
+        notificationManagerService.setUserNotificationSetting("Thibaut",
                 Collections.singletonList(ircNotificationService.getServiceId()),
                 Collections.singletonList(FileEventNotification.Type.GET),
                 true);
-        notificationManagerService.setUserSettingNotification("Thibaut",
+        notificationManagerService.setUserNotificationSetting("Thibaut",
                 Collections.singletonList(mailNotificationService.getServiceId()),
                 Collections.singletonList(FileEventNotification.Type.ADD),
                 true);

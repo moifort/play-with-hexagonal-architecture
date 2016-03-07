@@ -1,6 +1,6 @@
 package persistence.inmemory.repository;
 
-import domain.notificationmanager.spi.UserSettingNotificationRepository;
+import domain.notificationmanager.spi.NotificationSettingRepository;
 import domain.filemanager.api.entity.Permission;
 import persistence.inmemory.entity.File;
 
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class InMemoryRepository implements domain.filemanager.spi.FileRepository, UserSettingNotificationRepository {
+public class InMemoryRepositoryNotification implements domain.filemanager.spi.FileRepository, NotificationSettingRepository {
 
     /***********************
      *
@@ -93,7 +93,7 @@ public class InMemoryRepository implements domain.filemanager.spi.FileRepository
     private final Map<SettingKey, Boolean> userEventSettings = new HashMap<>();
 
     @Override
-    public void saveUserNotificationSetting(String userId, List<String> servicesId, List<String> notificationTypes, boolean isEnable) {
+    public void saveNotificationSetting(String userId, List<String> servicesId, List<String> notificationTypes, boolean isEnable) {
         for (String serviceId : servicesId) {
             for (String notificationType : notificationTypes) {
                 saveUserNotificationSetting(userId, serviceId, notificationType, isEnable);
@@ -107,7 +107,7 @@ public class InMemoryRepository implements domain.filemanager.spi.FileRepository
     }
 
     @Override
-    public boolean getUserNotificationSetting(String userId, String serviceId, String notificationType) {
+    public boolean getNotificationSetting(String userId, String serviceId, String notificationType) {
         SettingKey key = new SettingKey(userId, serviceId, notificationType);
         if (!userEventSettings.containsKey(key)) return false;
         return userEventSettings.get(key);

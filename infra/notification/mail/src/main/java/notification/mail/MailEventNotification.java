@@ -2,7 +2,7 @@ package notification.mail;
 
 import domain.filemanager.api.entity.File;
 import domain.filemanager.api.entity.Permission;
-import domain.notificationmanager.spi.FileEventNotificationService;
+import domain.notificationmanager.spi.NotificationService;
 
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MailEventNotification implements FileEventNotificationService {
+public class MailEventNotification implements NotificationService {
 
     private final Session session;
     private final String mailSendTo;

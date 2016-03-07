@@ -1,17 +1,17 @@
 package domain.notificationmanager.mock;
 
-import domain.notificationmanager.spi.UserSettingNotificationRepository;
+import domain.notificationmanager.spi.NotificationSettingRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MockInMemoryUserNotificationSettings implements UserSettingNotificationRepository {
+public class MockInMemoryNotificationSetting implements NotificationSettingRepository {
 
     private final Map<SettingKey, Boolean> userEventSettings = new HashMap<>();
 
     @Override
-    public void saveUserNotificationSetting(String userId, List<String> servicesId, List<String> notificationTypes, boolean isEnable) {
+    public void saveNotificationSetting(String userId, List<String> servicesId, List<String> notificationTypes, boolean isEnable) {
         for (String serviceId : servicesId) {
             for (String notificationType : notificationTypes) {
                 saveUserNotificationSetting(userId, serviceId, notificationType, isEnable);
@@ -25,7 +25,7 @@ public class MockInMemoryUserNotificationSettings implements UserSettingNotifica
     }
 
     @Override
-    public boolean getUserNotificationSetting(String userId, String serviceId, String notificationType) {
+    public boolean getNotificationSetting(String userId, String serviceId, String notificationType) {
         SettingKey key = new SettingKey(userId, serviceId, notificationType);
         if (!userEventSettings.containsKey(key)) return false;
         return userEventSettings.get(key);
@@ -34,12 +34,12 @@ public class MockInMemoryUserNotificationSettings implements UserSettingNotifica
     private static class SettingKey {
         private String userId;
         private String serviceId;
-        private String notificationType;
+        private String key;
 
-        public SettingKey(String userId, String serviceId, String notificationType) {
+        public SettingKey(String userId, String serviceId, String key) {
             this.userId = userId;
             this.serviceId = serviceId;
-            this.notificationType = notificationType;
+            this.key = key;
         }
 
         public String getUserId() {
@@ -50,8 +50,8 @@ public class MockInMemoryUserNotificationSettings implements UserSettingNotifica
             return serviceId;
         }
 
-        public String getNotificationType() {
-            return notificationType;
+        public String getKey() {
+            return key;
         }
 
         @Override
@@ -61,7 +61,7 @@ public class MockInMemoryUserNotificationSettings implements UserSettingNotifica
 
             SettingKey that = (SettingKey) o;
 
-            if (notificationType != null ? !notificationType.equals(that.notificationType) : that.notificationType != null)
+            if (key != null ? !key.equals(that.key) : that.key != null)
                 return false;
             if (serviceId != null ? !serviceId.equals(that.serviceId) : that.serviceId != null) return false;
             if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
@@ -73,7 +73,7 @@ public class MockInMemoryUserNotificationSettings implements UserSettingNotifica
         public int hashCode() {
             int result = userId != null ? userId.hashCode() : 0;
             result = 31 * result + (serviceId != null ? serviceId.hashCode() : 0);
-            result = 31 * result + (notificationType != null ? notificationType.hashCode() : 0);
+            result = 31 * result + (key != null ? key.hashCode() : 0);
             return result;
         }
     }
