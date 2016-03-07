@@ -2,7 +2,6 @@
 'use strict';
 
 var gulp = require('gulp'),
-    gutil = require('gulp-util'),
     prefix = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
     usemin = require('gulp-usemin'),
@@ -27,6 +26,7 @@ var gulp = require('gulp'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
     gulpIf = require('gulp-if'),
+    inject = require('gulp-inject'),
     footer = require('gulp-footer');
 
 
@@ -226,6 +226,12 @@ gulp.task('install', function (done) {
 
 gulp.task('serve', function () {
     runSequence('install', serve);
+});
+
+gulp.task('inject', function() {
+    return gulp.src(config.app + 'app/**/*.html')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js', {read: false}), {relative: true}))
+        .pipe(gulp.dest(config.app + 'app'));
 });
 
 gulp.task('build', function (cb) {

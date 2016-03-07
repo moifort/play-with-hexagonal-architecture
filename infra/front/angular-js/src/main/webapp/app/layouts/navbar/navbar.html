@@ -7,7 +7,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/"><span>jhipster</span> <span class="navbar-version">v{{VERSION}}</span></a>
+            <a class="navbar-brand" href="#/"><span>File</span>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.navCollapsed">
+            <ul class="nav navbar-nav navbar-right">
+                <li ui-sref-active="active">
+                    <a ui-sref="file-manager" ng-click="vm.navCollapsed = true">
+                        <span class="glyphicon glyphicon-cloud"></span>
+                        <span class="hidden-sm">Drive</span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
