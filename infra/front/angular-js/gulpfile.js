@@ -27,6 +27,7 @@ var gulp = require('gulp'),
     util = require('./gulp/utils'),
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
+    angularFilesort = require('gulp-angular-filesort'),
     footer = require('gulp-footer');
 
 
@@ -217,11 +218,12 @@ gulp.task('watch', function () {
     gulp.watch('bower.json', ['wiredep']);
     gulp.watch(config.app + 'content/css/**/*.css', ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
+    gulp.watch(config.app + 'app/**/*.js', ['inject']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('install', function (done) {
-    runSequence('wiredep', 'ngconstant:dev', done);
+    runSequence('wiredep', 'ngconstant:dev', 'inject', done);
 });
 
 gulp.task('serve', function () {
@@ -229,13 +231,13 @@ gulp.task('serve', function () {
 });
 
 gulp.task('inject', function() {
-    return gulp.src(config.app + 'app/**/*.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js', {read: false}), {relative: true}))
-        .pipe(gulp.dest(config.app + 'app'));
+    return gulp.src(config.app + 'index.html')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(gulp.dest(config.app));
 });
 
 gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'inject', 'eslint', 'usemin', cb);
 });
 
 gulp.task('default', ['serve']);
