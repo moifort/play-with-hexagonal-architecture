@@ -1,24 +1,20 @@
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" ng-click="vm.navCollapsed = !vm.navCollapsed">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#/"><span>File</span>
-        </div>
+<header>
 
-        <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.navCollapsed">
-            <ul class="nav navbar-nav navbar-right">
-                <li ui-sref-active="active">
-                    <a ui-sref="file-manager" ng-click="vm.navCollapsed = true">
-                        <span class="glyphicon glyphicon-cloud"></span>
-                        <span class="hidden-sm">Drive</span>
-                    </a>
-                </li>
-            </ul>
+    <section id="top-navigation" class="container-fluid nopadding">
+
+        <div class="row nopadding ident e-bg-light-texture">
+
+            <div class="col-md-12 nopadding">
+                <ul id="nav" class="row nopadding">
+                    <li class="col-sm-1 col-sm-offset-10 menuitem green">
+                        <a href="index.html" class="hvr-sweep-to-bottom"><i class="fa fa-cog"></i><span>home</span></a>
+                    </li>
+                    <li class="col-sm-1 menuitem blue">
+                        <a href="resume.html" class="hvr-sweep-to-bottom"><i class="flaticon-graduation61"></i><span>resume</span></a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </section>
+
+</header>

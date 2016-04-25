@@ -5,23 +5,9 @@
         .module('jhipsterApp')
         .factory('FileManagerResource', FileManagerResource);
 
-    FileManagerResource.$inject = ['$resource'];
+    FileManagerResource.$inject = ['Restangular'];
 
-    function FileManagerResource($resource) {
-        var service = $resource('file/:id', {}, {
-            'getAll': {
-                method: 'GET',
-                isArray: true
-            },
-            'get': {
-                method: 'GET',
-                transformResponse: function (data) {
-                    data = angular.fromJson(data);
-                    return data;
-                }
-            }
-        });
-
-        return service;
+    function FileManagerResource(Restangular) {
+        return Restangular.service('file');
     }
 })();

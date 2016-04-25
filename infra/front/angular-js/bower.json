@@ -11,7 +11,6 @@
     "angular-cookies": "1.5.0",
     "ngstorage": "0.3.10",
     "angular-loading-bar": "0.8.0",
-    "angular-resource": "1.5.0",
     "angular-sanitize": "1.5.0",
     "angular-ui-router": "0.2.18",
     "bootstrap": "3.3.6",
@@ -21,17 +20,25 @@
     "modernizr": "3.3.1",
     "ng-file-upload": "12.0.1",
     "ngInfiniteScroll": "1.2.2",
-    "swagger-ui": "2.1.4"
+    "swagger-ui": "2.1.4",
+    "restangular": "1.5.2",
+    "lodash": "4.6.1",
+    "font-awesome": "fontawesome#^4.5.0"
   },
   "devDependencies": {
     "angular-mocks": "1.5.0",
     "angular-scenario": "1.5.0"
   },
   "overrides": {
-    "angular" : {
+    "angular": {
       "dependencies": {
         "jquery": "2.2.1"
       }
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css"
+      ]
     },
     "bootstrap": {
       "main": [
@@ -41,6 +48,7 @@
       ]
     }
   },
+
   "resolutions": {
     "angular": "1.5.0",
     "jquery": "2.1.4"

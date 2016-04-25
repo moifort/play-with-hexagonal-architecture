@@ -5,8 +5,11 @@ import application.rest.mapper.FileDTOMapper;
 import com.codahale.metrics.annotation.Timed;
 import domain.filemanager.api.FileManagerService;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.util.List;
 
 @Path("/file")
@@ -21,31 +24,37 @@ public class FileManagerResource {
         this.fileDTOMapper = fileDTOMapper;
     }
 
-    @GET
-    @Path("add")
+    @POST
+    @Path("/")
     @Timed
-    public FileDTO addFile(@QueryParam("name") String name) {
-        return fileDTOMapper.fileToFileDTO(fileManagerService.addFile(name, null, "Thibaut"));
+    public Response add(@Valid FileDTO fileDTO) {
+        FileDTO fileAdded = fileDTOMapper.fileToFileDTO(fileManagerService.addFile(fileDTO.getName(), null, "Thibaut"));
+        return Response.created(UriBuilder.fromResource(FileManagerResource.class)
+                .build(fileAdded))
+                .build();
     }
 
-    @GET
-    @Path("delete/{id}")
+    @DELETE
+    @Path("/{id}")
     @Timed
-    public void deleteFile(@PathParam("id") Long id) {
+    public Response delete(@PathParam("id") Long id) {
         fileManagerService.deleteFile(id.toString(), "Thibaut");
+        return Response.ok(UriBuilder.fromResource(FileManagerResource.class)
+                .build(id))
+                .build();
     }
 
     @GET
     @Path("/{id}")
     @Timed
-    public FileDTO getFile(@PathParam("id") Long id) {
+    public FileDTO get(@PathParam("id") Long id) {
         return fileDTOMapper.fileToFileDTO(fileManagerService.getFile(id.toString(), "Thibaut"));
     }
 
     @GET
     @Path("/")
     @Timed
-    public List<FileDTO> getAllFiles() {
+    public List<FileDTO> getAll() {
         return fileDTOMapper.filesToFilesDTO(fileManagerService.getAllFiles("Thibaut"));
     }
 

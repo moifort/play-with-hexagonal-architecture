@@ -3,7 +3,7 @@
 This project is a sample of an hexagonal architecture. This sample implements functionality to manage files:
 
 * Save/delete/get files
-* Permission on the file (owner of the file)
+* Permission on the file (ownerId of the file)
 * Sharing file (share the file with different permission to other user)
 * Send notification when save/delete/get/sharing are call
 * Notification manager that allow to implement several notification services (IRC, mail, Twitter, etc.) and allow to the user to configure it (e.i. when the user delete a file it's send the notification by email only or when the file is share it's send a notification by mail and Twitter)

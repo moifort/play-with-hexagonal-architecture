@@ -1,16 +1,132 @@
 <div>
     <h2>File manager</h2>
     <jhi-alert></jhi-alert>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="moi.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span >
-                        New file
-                    </span>
-                </button>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group" ng-if="vm.files">
+                <div href="#" class="list-group-item" ng-repeat="file in vm.files">
+                    <div class="media">
+                        <div class="media-left media-middle" style="font-size: 40px">
+                            <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="list-group-item-heading">{{ file.name }}
+                                <small class="pull-right">
+                                    <div class="pull-right" ng-click="vm.delete(file)">
+                                        <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+                                    </div>
+                                    <span class="pull-right" style="margin: 0px 3px 0px 3px;"> | </span>
+
+                                    <div class="pull-right" ng-click="vm.delete(file)">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                    </div>
+                                </small>
+                            </h4>
+                            <p class="list-group-item-text text-right">Créé par {{ file.ownerId }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+
+        <div class="col-md-4">
+            <form name="editForm" class="form-inline" role="form" novalidate ng-submit="vm.add()">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="fileName" name="fileName" ng-model="vm.newFile.name"
+                           placeholder="File name">
+                </div>
+                <button type="submit" class="btn btn-primary">Add file</button>
+            </form>
+
+        </div>
+
+        <div class="col-md-4">
+            <form name="editForm" class="form-inline" role="form" novalidate
+                  ng-submit="vm.activateEmail(vm.emailSetting)">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="emailSetting" name="emailSetting"
+                           ng-model="vm.emailSetting"
+                           placeholder="Your email">
+                </div>
+                <button type="submit" class="btn btn-primary">Activate mail</button>
+            </form>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbGet" ng-change="vm.setEmailNotification('GET', vm.cbGet)">
+                    Get
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbGetShare"
+                           ng-change="vm.setEmailNotification('GET_SHARE', vm.cbGetShare)">
+                    Get Share
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbAdd" ng-change="vm.setEmailNotification('ADD', vm.cbAdd)">
+                    Add
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbDelete"
+                           ng-change="vm.setEmailNotification('DELETE', vm.cbDelete)">
+                    Delete
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbShareWith"
+                           ng-change="vm.setEmailNotification('SHARE_WITH', vm.cbShareWith)">
+                    Share with
+                </label>
+            </div>
+
+            <form name="editForm" class="form-inline" role="form" novalidate ng-submit="vm.activateIrc()">
+                <button type="submit" class="btn btn-primary">Activate IRC</button>
+            </form>
+            <a href="{{}}"></a>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbIrcGet" ng-change="vm.setIrcNotification('GET', vm.cbIrcGet)">
+                    Get
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbIrcGetShare"
+                           ng-change="vm.setIrcNotification('GET_SHARE', vm.cbIrcGetShare)">
+                    Get Share
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbIrcAdd" ng-change="vm.setIrcNotification('ADD', vm.cbIrcAdd)">
+                    Add
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbIrcDelete"
+                           ng-change="vm.setIrcNotification('DELETE', vm.cbIrcDelete)">
+                    Delete
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="vm.cbIrcShareWith"
+                           ng-change="vm.setIrcNotification('SHARE_WITH', vm.cbIrcShareWith)">
+                    Share with
+                </label>
+            </div>
+            <div>
+                <iframe src="https://kiwiirc.com/client/irc.kiwiirc.com/?nick=TheSuperThibaut#AwsomeHexagonal" style="border:0; width:100%; height:450px;"></iframe>
+            </div>
+        </div>
+
     </div>
 </div>

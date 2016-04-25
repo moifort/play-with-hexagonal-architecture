@@ -4,7 +4,7 @@
     angular
         .module('jhipsterApp', [
             'ngStorage',
-            'ngResource',
+            'restangular',
             'ngCookies',
             'ngAria',
             'ngCacheBuster',

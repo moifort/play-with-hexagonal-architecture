@@ -17,7 +17,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/site/front/file-manager/file-manager.html',
-                    controller: 'FileManager',
+                    controller: 'FileManagerController',
                     controllerAs: 'vm'
                 }
             }
