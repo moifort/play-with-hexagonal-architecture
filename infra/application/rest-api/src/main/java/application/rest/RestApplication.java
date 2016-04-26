@@ -44,7 +44,7 @@ public class RestApplication extends Application<RestConfiguration> {
         InMemoryRepositoryNotification notificationRepository = new InMemoryRepositoryNotification();
 
         // Notification Service
-        NotificationService mailNotificationService = new MailNotification("thibaut@alantaya.com", "Doremido91!");
+        NotificationService mailNotificationService = new MailNotification("mail@mail.com", "######");
         NotificationService ircNotificationService = new IrcNotification("irc.freenode.org");
         NotificationCenterService notificationCenterService = new NotificationCenterServiceImpl(
                 Arrays.asList(mailNotificationService, ircNotificationService),
