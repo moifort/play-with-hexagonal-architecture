@@ -1,3 +1,5 @@
+You can find a simpliest version of hexagonal architecture: https://github.com/moifort/cixi
+
 # hexagonal-architecture-sample
 
 This project is a sample of an hexagonal architecture. This sample implements functionality to manage files:
